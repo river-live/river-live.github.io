@@ -232,10 +232,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (isWideScreen && !onMain && topNavVisible) {
       styleNavColors("#f7f7f7", "#0779e4", "#28c9ae");
-      changeImgSrc("river-logo", "images/logos/crato-logo.png"); // black
+      changeImgSrc("river-logo", "images/logos/river_logo-full.png"); // black
     } else {
       styleNavColors("#f7f7f7", "#0779e4", "#28c9ae");
-      changeImgSrc("river-logo", "images/logos/crato-logo.png");
+      changeImgSrc("river-logo", "images/logos/river_logo-full.png");
     }
   };
 
