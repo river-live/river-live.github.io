@@ -93,7 +93,6 @@ a:hover {
 .integration:nth-of-type(2) {
   background: var(--color-blue);
   color: white;
-  /* border-bottom: 2px solid #dfe0e2; */
   padding-top: 40px;
   padding-bottom: 40px;
 }
@@ -101,13 +100,9 @@ a:hover {
 .integration:nth-of-type(3) {
   background: var(--color-beige);
   color: var(--color-blue);
-  /* border-bottom: 2px solid #dfe0e2; */
   padding-top: 40px;
   padding-bottom: 40px;
 }
-
-/* .integration:nth-of-type(2) div.box {
-} */
 
 .text-box {
   width: 70%;
@@ -143,23 +138,6 @@ a:hover {
 .integration img#banner-deploy {
   padding-top: 0;
   width: 85%;
-}
-
-.button {
-  padding: 25px 50px;
-  background: #fff;
-  color: #35363a;
-  text-transform: uppercase;
-  font-size: 24px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  cursor: pointer;
-  line-height: 34px;
-  text-decoration: none;
-}
-
-.button:hover {
-  background: #fff;
 }
 
 main > section {
@@ -248,17 +226,8 @@ img {
   opacity: 1;
 }
 
-#crato-deploy {
-  background-color: #282828;
-  border: 10px solid #282828;
-  border-radius: 10px;
-  height: 300px;
-  width: auto;
-}
-
 #case-study img {
   margin: 50px auto;
-
   margin-bottom: 10px;
   max-width: 50vw;
   height: auto;
@@ -412,7 +381,7 @@ header h1 img {
 }
 
 #side-nav img {
-  width: 100%;
+  width: 60%;
   max-width: 250px;
   margin: 20px auto;
   height: auto;
@@ -498,7 +467,6 @@ h3 {
 
 .softened {
   box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
-
   border-radius: 5px;
 }
 
@@ -530,14 +498,6 @@ h3 {
   margin-left: 2rem;
 }
 
-/* #case-study li code {
-  font-size: 0.8rem;
-}
-
-#case-study ol li code {
-  font-size: 1rem;
-} */
-
 #case-study ol li {
   list-style: decimal;
 }
@@ -556,41 +516,6 @@ h3 {
 
 #slidehow img.active {
   display: block;
-}
-
-.buttons {
-  width: 250px;
-  margin: 0 auto;
-  text-align: center;
-}
-
-/* ---------------------------------
-
-              commands
-
------------------------------------- */
-
-.command {
-  background-color: #eee;
-  border-radius: 2px;
-  color: #282828;
-  /*display: inline-block;*/
-  /*font-size: 1.2rem;*/
-  font-weight: bold;
-  margin-bottom: 20px;
-  padding: 0.3rem;
-}
-
-#list-command code {
-  color: #ebdbb2;
-}
-
-#list-command .heading {
-  color: #98971a;
-}
-
-#list-command .crato-resource {
-  color: #b8bb26;
 }
 
 /* ---------------------------------
@@ -679,7 +604,7 @@ h2#references {
 }
 
 #our-team a {
-  color: #282828;
+  color: var(--color-blue);
   text-decoration: none;
 }
 
@@ -722,10 +647,6 @@ small {
   text-align: center;
   font-style: italic;
   opacity: 0.5;
-}
-
-#our-team small a {
-  color: #9eba2a;
 }
 
 /* ---------------------------------
@@ -957,11 +878,6 @@ small {
     font-size: 1.1rem;
     line-height: 1.6rem;
   }
-
-  /* code,
-  .command {
-    font-size: 0.9rem;
-  } */
 
   pre code {
     font-size: 1.5vw;
