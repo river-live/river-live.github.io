@@ -1,4 +1,3 @@
-<!-- <span style="display:block;text-align:center">![River Logo](./images/logos/river_logo-readme.png)</span> -->
 <p align="center">
   <img src="images/logos/river_logo-readme.png" />
 </p>
