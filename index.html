@@ -4,12 +4,12 @@
   <head>
     <meta charset="UTF-8" />
 
-    <meta name="title" property="og:title" content="Apex" />
+    <meta name="title" property="og:title" content="River" />
 
     <meta
       name="description"
       property="og:description"
-      content="Apex is an API proxy that provides one place to log and control traffic between microservices"
+      content="River is a drop-in real-time service for web applications. It provides an easy-to-deploy and ready-to-scale solution for existing applications with real-time needs."
     />
 
     <meta name="type" property="og:type" content="website" />
@@ -63,7 +63,7 @@
     <div class="logo-links">
       <p id="river-logo">MENU</p>
 
-      <a href="https://github.com/apex-api-proxy" target="_blank">
+      <a href="https://github.com/river-live" target="_blank">
         <img src="images/logos/river_github-black.png" alt="github logo" id="github-logo" />
       </a>
     </div>
@@ -73,11 +73,11 @@
     <nav id="site-navigation">
       <ul>
         <li>
-          <a href="#home" id="home-link">Home</a>
+          <a href="#home" id="home-link">HOME</a>
         </li>
 
         <li>
-          <a href="#case-study" id="case-study-link">Case Study</a>
+          <a href="#case-study" id="case-study-link">CASE STUDY</a>
 
           <nav id="case-study-mobile">
             <ul></ul>
@@ -85,7 +85,7 @@
         </li>
 
         <li>
-          <a href="#our-team" id="our-team-link">Our Team</a>
+          <a href="#our-team" id="our-team-link">OUR TEAM</a>
         </li>
       </ul>
     </nav>
@@ -114,7 +114,6 @@
             No additional client libraries needed in your service code
           </p>
 
-          <!-- <a class="button" href="#case-study">Learn More</a> -->
         </div>
       </article>
     </section>
@@ -128,7 +127,6 @@
             Define both global traffic rules and custom rules for individual services
           </p>
 
-          <!-- <a class="button" href="#case-study">Learn More</a> -->
         </div>
       </article>
 
@@ -160,7 +158,6 @@
             No changes required in how your services are currently deployed
           </p>
 
-          <!-- <a class="button" href="#case-study">Learn More</a> -->
         </div>
       </article>
     </section>
@@ -180,7 +177,7 @@
           <ul></ul>
         </nav>
 
-        <h2 id="introduction">1) Introduction</h2>
+        <h2 id="introduction">1) What is River?</h2>
 
         <p>
           Apex is an API proxy for microservices. It provides one place to log and control
@@ -219,7 +216,7 @@
           request in one configuration store.
         </p>
 
-        <h2 id="microservices">2) Microservices</h2>
+        <h2 id="microservices">2) What is real-time?</h2>
 
         <p>
           To understand how Apex makes it easier to work with microservices, it is important to
@@ -227,7 +224,7 @@
           microservices architecture is a choice, the other choice being, of course, a monolith.
         </p>
 
-        <h3>2.1) Monolithic architecture</h3>
+        <h3>2.1) What is real-time in the context of web applications?</h3>
 
         <p>
           In a monolithic architecture, there is typically just one application server (the
@@ -290,7 +287,7 @@
           tax filings.
         </p>
 
-        <h3>2.2) Microservices architecture</h3>
+        <h3>2.2) How is real-time achieved?</h3>
 
         <p>
           The microservices architecture differs from the monolith in two major ways. First,
@@ -337,7 +334,7 @@
           culprit behind many of its drawbacks.
         </p>
 
-        <h3>2.3) Microservices benefits</h3>
+        <h3>2.3) Is real-time hard?</h3>
 
         <p>
           A first benefit of microservices is a wider choice of technologies for service developers.
@@ -397,7 +394,7 @@
           />
         </div>
 
-        <h2 id="microservices-challenges">3) Microservices challenges</h2>
+        <h2 id="microservices-challenges">3) A separate real-time service</h2>
 
         <p>
           We have now seen how the network boundaries between microservices result in several major
@@ -406,7 +403,7 @@
           of challenges.
         </p>
 
-        <h3>3.1) Network unreliability and latency</h3>
+        <h3>3.1) A separate server</h3>
 
         <p>
           Recall that in a monolith, subsystems are simply classes or modules that communicate
@@ -442,7 +439,7 @@
           same request a few seconds later).
         </p>
 
-        <h3>3.2) Diagnosing network faults</h3>
+        <h3>3.2) Multiple backend services</h3>
 
         <p>
           Diagnosing a network fault can be especially cumbersome when a single workflow passes
@@ -469,7 +466,7 @@
           that failed. This can be a laborious and slow process.
         </p>
 
-        <h3>3.3) Managing fault-handling logic</h3>
+        <h3>3.3) Where does the real-time service fit in?</h3>
 
         <p>
           Other times, a network fault may be totally random, and a request should simply be retried
@@ -533,7 +530,7 @@
           />
         </div>
 
-        <h2 id="existing-solutions">4) Existing solutions</h2>
+        <h2 id="existing-solutions">4) Adding real-time functionality</h2>
 
         <p>
           With microservices becoming increasingly popular, a number of solutions have emerged to
@@ -552,7 +549,7 @@
           />
         </div>
 
-        <h3>4.0) Proxy server</h3>
+        <h3>4.1) Without River</h3>
 
         <p>
           A proxy is simply a server that sits on the path of network traffic between two
@@ -583,7 +580,7 @@
           forwards the same response back to <code>orders</code>.
         </p>
 
-        <h3>4.1) API gateway</h3>
+        <h3>4.2) With River</h3>
 
         <h4>4.1.1) API gateway features</h4>
 
@@ -719,7 +716,7 @@
           Apex’s solution.
         </p>
 
-        <h3>4.2) Service mesh</h3>
+        <h3>4.3) Overall pattern</h3>
 
         <p>
           The service mesh is another existing solution to the challenges with microservices that
@@ -920,9 +917,9 @@
           />
         </div>
 
-        <h2 id="design-architecture">5) Design & architecture</h2>
+        <h2 id="design-architecture">5) Existing solutions</h2>
 
-        <h3>5.1) Apex trade-offs</h3>
+        <h3>5.1) Open-source solutions</h3>
 
         <p>
           For some teams, neither an API gateway nor a service mesh provide the right set of
@@ -963,7 +960,7 @@
           These are precisely the trade-offs we chose when building Apex.
         </p>
 
-        <h3>5.2) Proxy server with middleware layers</h3>
+        <h3>5.2) Commercial solutions</h3>
 
         <p>
           Apex’s architecture includes 5 components:
@@ -1015,7 +1012,7 @@
           />
         </div>
 
-        <h3>5.3) Logging and tracing service-to-service traffic</h3>
+        <h3>5.3) DAZN in-house WebSocket solution</h3>
 
         <p>
           Since <code>apex-proxy</code> intercepts all network traffic between microservices, it is
@@ -1226,7 +1223,7 @@
           [<a href="#footnote-20">20</a>].
         </p>
 
-        <h2 id="implementation-deployment">6) Implementation & deployment</h2>
+        <h2 id="implementation-deployment">6) Building River</h2>
 
         <p>
           When implementing Apex, we made technology choices based on the trade-offs we described in
@@ -1246,7 +1243,7 @@
           Below, we briefly elaborate upon each of these choices.
         </p>
 
-        <h3>6.1) <code>apex-proxy</code> - Node.js and Express.js</h3>
+        <h3>6.1) Designing River</h3>
 
         <div class="img-wrapper">
           <img
@@ -1268,7 +1265,7 @@
           widespread usage among developers.
         </p>
 
-        <h3>6.2) <code>apex-logs-db</code> - TimescaleDB</h3>
+        <h3>6.2) Building, piece-by-piece</h3>
 
         <div class="img-wrapper">
           <img
@@ -1286,7 +1283,7 @@
           bottleneck in the system.
         </p>
 
-        <h3>6.3) <code>apex-config-store</code> - Redis</h3>
+        <h3>6.3) The road not taken</h3>
 
         <div class="img-wrapper">
           <img
@@ -1389,9 +1386,9 @@
           Elastic Container Service (ECS).
         </p>
 
-        <h2 id="implementation-challenges">7) Implementation challenges</h2>
+        <h2 id="implementation-challenges">7) Automating deployment</h2>
 
-        <h3>7.1) Logging large request and response bodies</h3>
+        <h3>7.1) Interacting with AWS</h3>
 
         <p>
           Sending large request and response bodies from <code>apex-proxy</code> to
@@ -1453,7 +1450,7 @@
           unimportant data, we also deemed this an acceptable trade-off.
         </p>
 
-        <h3>7.2) Persisting logs and config data in containers</h3>
+        <h3>7.2) Creating a Lambda: an example</h3>
 
         <p>
           While containerizing TimescaleDB and Redis made deployment simpler for users, it also
@@ -1491,9 +1488,9 @@
           configuring Apex to support the EC2 launch type.
         </p>
 
-        <h2 id="future-work">8) Future work</h2>
+        <h2 id="future-work">8) How to use River</h2>
 
-        <h3>8.1) Handle bursty traffic with a queue</h3>
+        <h3>8.1) Deployment</h3>
 
         <p>
           Apex, as is, represents a single point of failure for a system. To protect it from being
@@ -1504,7 +1501,7 @@
           in the right order.
         </p>
 
-        <h3>8.2) Back up logs and config</h3>
+        <h3>8.2) Libraries</h3>
 
         <p>
           While Docker volumes offer strong persistence guarantees for Apex’s logs and configuration
@@ -1514,7 +1511,7 @@
           periodically back up data to a cloud storage service (e.g. AWS S3 and S3 Glacier).
         </p>
 
-        <h3>8.3) Reduce latency by caching config in <code>apex-proxy</code></h3>
+        <h3>8.3) Authentication</h3>
 
         <p>
           Currently, every incoming request to Apex triggers multiple reads from the Redis
