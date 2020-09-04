@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
     e.preventDefault();
     $([document.documentElement, document.body]).animate(
       {
-        scrollTop: $("#introduction").offset().top,
+        scrollTop: $("#what-is-river?").offset().top,
       },
       2000
     );
