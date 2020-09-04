@@ -233,6 +233,10 @@
           >]
         </p>
 
+        <div class="img-wrapper">
+          <img src="images/diagrams/Fargate.png" alt="Monolith" />
+        </div>
+
         <p>
           Some current solutions exist to help teams perform these tasks faster.
           Client libraries can be imported into each service’s code to automate
@@ -242,6 +246,9 @@
           services altogether. These are all valid solutions with their own set
           of trade-offs.
         </p>
+        <div class="img-wrapper">
+          <img src="images/diagrams/16.png" alt="Monolith" />
+        </div>
 
         <p>
           For a small team running their first few microservices, however, none
@@ -250,6 +257,29 @@
           operation, over high availability and scalability. These are the
           trade-offs that underpinned Apex’s design.
         </p>
+        <div class="img-wrapper">
+          <img src="images/diagrams/06.png" alt="Monolith" />
+        </div>
+        <p>
+          For a small team running their first few microservices, however, none
+          of the existing solutions provide the right set of trade-offs:
+          optimized for service-to-service traffic, and ease of deployment and
+          operation, over high availability and scalability. These are the
+          trade-offs that underpinned Apex’s design.
+        </p>
+        <div class="img-wrapper">
+          <img src="images/diagrams/07.png" alt="Monolith" />
+        </div>
+        <p>
+          For a small team running their first few microservices, however, none
+          of the existing solutions provide the right set of trade-offs:
+          optimized for service-to-service traffic, and ease of deployment and
+          operation, over high availability and scalability. These are the
+          trade-offs that underpinned Apex’s design.
+        </p>
+        <div class="img-wrapper">
+          <img src="images/diagrams/17.png" alt="Monolith" />
+        </div>
 
         <p>
           With Apex, a user can view the logs for all service-to-service traffic
@@ -260,6 +290,9 @@
         </p>
 
         <h2 id="microservices">2) Microservices</h2>
+        <div class="img-wrapper">
+          <img src="images/diagrams/19.png" alt="Monolith" />
+        </div>
 
         <p>
           To understand how Apex makes it easier to work with microservices, it
@@ -284,17 +317,18 @@
           <img src="images/diagrams/23.png" alt="Monolith" />
         </div>
 
+        <p>invoked by each other to facilitate communication between them.</p>
+
+        <div class="img-wrapper">
+          <img src="images/diagrams/23_500px-wide.png" alt="Monolith" />
+        </div>
+
         <p>
           Consider the above example of a monolithic system that serves an
-          e-commerce store to users. The business logic in the app server can be
-          organized into classes or modules, or more generally, ‘subsystems’,
-          that encapsulate related functionality e.g. manipulating customer
-          data, checking and updating inventory, creating shipments. These
-          subsystems can each expose an interface of methods, or more generally
-          ‘behaviors’, that can be invoked by each other to facilitate
-          communication between them.
+          e-commerce store to users. These subsystems can each expose an
+          interface of methods, or more generally ‘behaviors’, that can be
+          invoked by each other to facilitate communication between them.
         </p>
-
         <div class="img-wrapper">
           <img src="images/diagrams/24.png" alt="Monolith" />
         </div>
@@ -323,7 +357,19 @@
 
         <div class="img-wrapper">
           <img
-            src="images/diagrams/26.png"
+            src="images/diagrams/25-500px-wide.png"
+            alt="In-process method calls are reliable and fast"
+          />
+        </div>
+
+        <p>
+          To do this, our server publishes to a specific channel, here the
+          “dogs” channel, via an HTTP POST request to River.
+        </p>
+
+        <div class="img-wrapper">
+          <img
+            src="images/diagrams/26-500px-wide.png"
             alt="In-process method calls are reliable and fast"
           />
         </div>
@@ -335,6 +381,17 @@
         <p>
           We can think of this publishing as an event about which all subscribed
           clients will be notified.
+        </p>
+        <div class="img-wrapper">
+          <img
+            src="images/diagrams/26.png"
+            alt="In-process method calls are reliable and fast"
+          />
+        </div>
+
+        <p>
+          To do this, our server publishes to a specific channel, here the
+          “dogs” channel, via an HTTP POST request to River.
         </p>
 
         <div class="img-wrapper">
@@ -356,7 +413,7 @@
 
         <div class="img-wrapper">
           <img
-            src="images/diagrams/29_forum-direct-export.png"
+            src="images/diagrams/34.png"
             alt="In-process method calls are reliable and fast"
           />
         </div>
@@ -373,20 +430,10 @@
 
         <div class="img-wrapper">
           <img
-            src="images/diagrams/2.1) Monolith with multiple databases.png"
+            src="images/diagrams/48.png"
             alt="Monolith with multiple databases"
           />
         </div>
-
-        <p>
-          A simple analogy for a monolithic application is a small business run
-          by just one owner. The owner has to do everything - sales and
-          marketing, procurement, operations, finance, IT. There may be one
-          central log book that keeps track of all business data, or the owner
-          could use several ‘persistent data stores’ in parallel e.g. CRM system
-          for sales data, accounting software for financial data, ERP system for
-          inventory data, pen and paper for tax filings.
-        </p>
 
         <h3>2.2) Microservices architecture</h3>
 
@@ -400,7 +447,7 @@
 
         <div class="img-wrapper">
           <img
-            src="images/diagrams/2.2) Microservices with multiple databases.png"
+            src="images/diagrams/49.png"
             alt="Monolith architecture vs microservices architecture"
           />
         </div>
@@ -413,42 +460,6 @@
           the <code>/shipments</code> endpoint of the <code>shipping</code>
           service, and attaching any other relevant information in the request
           body.
-        </p>
-
-        <div class="img-wrapper">
-          <img
-            src="images/diagrams/51_with-ECS-10pnt.png"
-            alt="Microservices communicate over the network"
-          />
-        </div>
-
-        <p>
-          (1100 pixels) Now we have the final version of our infrastructure. We
-          have moved from EC2 instances to Amazon’s Elastic Container Service.
-          We have taken our WebSocket server, and put it in a Docker container,
-          which allows us to focus solely on the business logic of River, and
-          not concern ourselves with server maintenance at all. We no longer
-          have to worry about Node.js version conflicts or logs filling up, and
-          can simply deploy our Docker container without thinking about
-          underlying dependencies.
-        </p>
-
-        <div class="img-wrapper">
-          <img
-            src="images/diagrams/49.png"
-            alt="Microservices communicate over the network"
-          />
-        </div>
-
-        <p>
-          (1000 pixels) Now we have the final version of our infrastructure. We
-          have moved from EC2 instances to Amazon’s Elastic Container Service.
-          We have taken our WebSocket server, and put it in a Docker container,
-          which allows us to focus solely on the business logic of River, and
-          not concern ourselves with server maintenance at all. We no longer
-          have to worry about Node.js version conflicts or logs filling up, and
-          can simply deploy our Docker container without thinking about
-          underlying dependencies.
         </p>
 
         <div class="img-wrapper">
@@ -493,14 +504,14 @@
         </div>
 
         <p>
-          (direct export at 1920px, resized to 950px) Now we have the final
-          version of our infrastructure. We have moved from EC2 instances to
-          Amazon’s Elastic Container Service. We have taken our WebSocket
-          server, and put it in a Docker container, which allows us to focus
-          solely on the business logic of River, and not concern ourselves with
-          server maintenance at all. We no longer have to worry about Node.js
-          version conflicts or logs filling up, and can simply deploy our Docker
-          container without thinking about underlying dependencies.
+          (resized to 950px) Now we have the final version of our
+          infrastructure. We have moved from EC2 instances to Amazon’s Elastic
+          Container Service. We have taken our WebSocket server, and put it in a
+          Docker container, which allows us to focus solely on the business
+          logic of River, and not concern ourselves with server maintenance at
+          all. We no longer have to worry about Node.js version conflicts or
+          logs filling up, and can simply deploy our Docker container without
+          thinking about underlying dependencies.
         </p>
         <p>
           As we shall see, the use of the network for communication between
@@ -551,7 +562,7 @@
 
         <div class="img-wrapper">
           <img
-            src="images/diagrams/2.3) Redeploying one microservice.png"
+            src="images/diagrams/44.png"
             alt="Each microservice can be independently redeployed"
           />
         </div>
@@ -574,20 +585,12 @@
 
         <div class="img-wrapper">
           <img
-            src="images/diagrams/2.3) Scaling microservices.png"
+            src="images/diagrams/39.png"
             alt="Each microservice can be independently scaled"
           />
         </div>
 
         <h2 id="microservices-challenges">3) Microservices challenges</h2>
-
-        <p>
-          We have now seen how the network boundaries between microservices
-          result in several major benefits over the monolithic architecture. The
-          network, however, comes with baggage, and relying heavily on it to
-          communicate between subsystems introduces an entire new dimension of
-          challenges.
-        </p>
 
         <h3>3.1) Network unreliability and latency</h3>
 
@@ -601,7 +604,7 @@
 
         <div class="img-wrapper">
           <img
-            src="images/diagrams/3.1) In-process method calls vs network hops.png"
+            src="images/diagrams/39-small.png"
             alt="Method calls are fast, but network hops are (relatively) slow"
           />
         </div>
