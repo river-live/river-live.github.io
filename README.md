@@ -1,4 +1,5 @@
-<span style="display:block;text-align:center">![River Logo](./images/logos/river_logo-readme.png)</span>
+<!-- <span style="display:block;text-align:center">![River Logo](./images/logos/river_logo-readme.png)</span> -->
+<div style="text-align:center"><img src="images/logos/river_logo-readme.png" /></div>
 
 <h1 align="center">River: A drop-in real-time service for web applications</h1>
 <h2 align="center">Cloud-native, easily deployed, and ready to scale with your needs</h2>
