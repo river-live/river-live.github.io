@@ -1,4 +1,4 @@
-![River Logo]('./images/logos/river_logo-full.png')
+![River Logo](./images/logos/river_logo-full.png)
 
 <h1 align="center">River: A drop-in real-time service for web applications</h1>
 <h2 align="center">Cloud-native, easily deployed, and ready to scale with your needs</h2>
