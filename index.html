@@ -1000,137 +1000,424 @@
 
         <h3>7.1) Interacting with AWS</h3>
 
+        <div class="img-wrapper">
+          <img
+            src="images/diagrams/example.png"
+            alt="aws-services-diagram"
+          />
+        </div>
+
         <p>
-          Sending large request and response bodies from <code>apex-proxy</code> to
-          <code>apex-logs-db</code> can add significant latencies to request-response cycles, spin
-          up long-running processes in <code>apex-proxy</code> that decrease its throughput, and
-          fill up <code>apex-logs-db</code> far faster than necessary.
+          This diagram represents different ways to interact with Amazon Web Services, from manual towards automation. These are alternatives that application developers can choose depending on their needs. Many developers will be familiar with the web-based management console and it is a good entry-point in the world of AWS. It allows developers to create resources easily by clicking through the web interface. It was not an option for us, though, as we wanted to automate the deployment process. AWS web console is user-friendly, but it doesn’t make the process repeatable. For that, we needed to look at Software Development Kits (SDKs) and blueprints.
         </p>
 
         <p>
-          To solve these problems, we ultimately chose to avoid decompressing any log bodies that
-          arrive in a compressed format, and send logs asynchronously from an in-memory queue.
-        </p>
-
-        <h4>7.1.1) Solution 1: keep bodies compressed</h4>
-
-        <p>
-          Quite simply, sending compressed bodies means fewer bytes transmitted and stored. For a
-          typical web page that arrives at <code>apex-proxy</code> in a compressed format (e.g.
-          CNN’s homepage), we found that sending the compressed body to
-          <code>apex-logs-db</code> typically took less than 1 second, compared with 5-10 seconds
-          for the decompressed version.
+          SDKs allow developers to write scripts in a familiar programming language, say JavaScript, to build their infrastructure. This is a great tool, but anyone who has worked with these scripts can attest that it is still a lot of work. Defining resources in a specific order and having them interact one with another is not always an easy task. In response to that, a new category of tools has emerged, often called blueprints.
         </p>
 
         <p>
-          While keeping bodies compressed was a sensible choice, it came with the trade-off of
-          inconvenience for users of <code>apex-logs-db</code>, who must now take the extra step to
-          decompress bodies to make them human-readable again.
-        </p>
-
-        <h4>7.1.2) Solution 2: queue logs and send them asynchronously</h4>
-
-        <p>
-          Queuing logs to be sent asynchronously has the effect of decoupling writes to
-          <code>apex-logs-db</code> from request-response cycles through <code>apex-proxy</code>. If
-          <code>apex-proxy</code> happens to receive a particularly large response body that must be
-          logged, it can simply enqueue this log, and move on to forwarding the response back to the
-          requesting service and then on to processing the next request. The request-response cycle
-          can complete regardless of when, or whether, the log eventually gets sent to
-          <code>apex-logs-db</code>.
-        </p>
-
-        <p>
-          Adding a queue in this way also lays the foundation for a further optimization - sending
-          logs to TimescaleDB in batches. TimescaleDB’s own docs explain that this could further
-          increase its data ingestion rate. [<a href="#footnote-26">26</a>]
-        </p>
-
-        <p>
-          However, this solution comes with two trade-offs. The first is that several large log
-          queues within concurrent processes could consume a lot of memory, straining the host
-          server. Given TimescaleDB’s high ingestion rate, we made the decision to accept this
-          trade-off, in the belief that the logs will dequeue fast enough to avoid hitting such a
-          limit.
-        </p>
-
-        <p>
-          The second trade-off is that should <code>apex-proxy</code> crash, any logs that have not
-          yet been dequeued would now be lost from memory. Since each individual log is relatively
-          unimportant data, we also deemed this an acceptable trade-off.
+          The difference between SDKs and blueprints is the difference between “how” and “what”, between an imperative language and a declarative language. With an imperative language, we give specific instructions on how to achieve an outcome. With a declarative language, we simply describe what outcome we want. SQL is an example of a declarative language that many will be familiar with.
         </p>
 
         <h3>7.2) Creating a Lambda: an example</h3>
 
         <p>
-          While containerizing TimescaleDB and Redis made deployment simpler for users, it also
-          increased the risk of losing logs and configuration data. This is due to the ephemeral
-          nature of Docker containers, whose “data doesn’t persist when the container no longer
-          exists”. [<a href="#footnote-27">27</a>]
+          The tradeoffs between these different approaches will become clearer with an example. We will describe a few different scenarios of creating a Lambda function. We chose the Lambda function as an example because it is a relatively simple resource. For a more complex resource, such as an ECS cluster, the overall complexity would be much greater.
+        </p>
+
+        <h4>7.2.1) With AWS CLI</h4>
+
+        <div class="img-wrapper">
+          <img
+            src="images/example.png"
+            alt="lambda-cli-diagram"
+          />
+        </div>
+
+        <p>
+          This screenshot is taken from the AWS documentation and describes how to create a Lambda function using the CLI. The developer needs to first define the function itself and manually zip it, then run a long command from the terminal with many flags. In the last line of that long command, the Lambda function is assigned a role. This is often a major pain point when deploying AWS resources. Our infrastructure will have many different resources and these resources need to communicate in a secure way. To achieve that, AWS uses roles and permissions. In this specific example, the role was created by another long command that we haven’t included here. The developer also needs to create a policy to add permissions to that role and attach the policy to the role: more commands.
+        </p>
+
+        <h4>7.2.2) With AWS CloudFormation</h4>
+
+        <p>
+          Of course, the CLI was not an option for us as it doesn’t allow for automation. We looked next into these blueprints we mentioned before, with AWS CloudFormation templates being one example. These are JSON or YAML templates that allow developers to simply describe what resources they want and what these resources should look like. Developers will still need to describe roles and permissions, but it makes the deployment consistent and repeatable.
         </p>
 
         <p>
-          Fortunately, Docker containers support ‘volumes’, a mechanism to persist data to a
-          container’s host filesystem, and beyond the container’s lifespan. [<a href="#footnote-28"
-            >28</a
-          >] When deploying containers locally with Docker Compose, enabling this feature requires
-          just an extra line of code in the <code>docker-compose.yml</code> configuration file.
+          This was definitely a step forward for us, but on the downside, these templates are not very user-friendly. They can run over many hundreds of lines of code and most of these are simply default settings. Developers often end up copy-pasting boilerplate templates provided by AWS and looking through those hundreds of lines for the specific parameters they need to change.
+        </p>
+
+        <div class="img-wrapper">
+          <img
+            src="images/example.png"
+            alt="aws-cloudformation-diagram"
+          />
+        </div>
+
+        <h4>7.2.3) With AWS Cloud Development Kit</h4>
+
+        <p>
+          While researching better options, we came across AWS Cloud Development Kit (CDK). It is an abstraction on top of AWS CloudFormation templates that makes them much easier to work with. AWS CDK is a very interesting concept as it allows developers to write code in a familiar language, e.g. JavaScript or Python, and model their infrastructure using Object-Oriented code. Under the hood, it will generate CloudFormation templates, preconfigured with sensible defaults. It makes infrastructure components easy to customize and easy to share. And it makes the whole infrastructure easy to deploy and easy to tear down.
         </p>
 
         <p>
-          Deploying Docker containers to AWS’s Elastic Container Service (ECS), though, requires
-          more care. ECS offers two launch types [<a href="#footnote-29">29</a>]: the EC2 launch
-          type provides more control, by allowing developers to choose the type and quantity of EC2
-          instances to provision for their containers. Its downside is that it requires more steps
-          to deploy. The Fargate launch type, in contrast, abstracts away the entire
-          resource-provisioning process, reducing the deployment process to running just 6 or so
-          commands. Crucially, only the EC2 launch type supports Docker volumes. [<a
-            href="#footnote-30"
-            >30</a
-          >]
+          On the downside, AWS CDK is very new (2018) and under active development. While the docs are good, there are no books yet on the topic and not a lot of good examples for more specific configuration requirements.
         </p>
 
         <p>
-          We had initially wanted to support the Fargate launch type, in alignment with our design
-          goal of being ‘simple to deploy’. However, it was clear to us that the ability to persist
-          logs and configuration data beyond the lifecycle of individual containers will be
-          important for any Apex user, and in the end we spent a significant amount of extra time
-          configuring Apex to support the EC2 launch type.
+          Overall, though, it worked really well for us and this is an example of what it looks like.
         </p>
 
-        <h2 id="future-work">8) How to use River</h2>
+        <div class="img-wrapper">
+          <img
+            src="images/example.png"
+            alt="aws-cdk-diagram"
+          />
+        </div>
+
+        <p>
+          Another advantage is how easy it becomes for resources to interact one with another. As they are defined as JavaScript objects, they can easily communicate one with another in the code itself. The complexity of defining roles and permissions that we mentioned before is abstracted away from the developer.
+        </p>
+
+        <code>add vpc line</code>
+
+        <p>
+          This line is all that is needed to include the Lambda in a Virtual Private Cloud (VPC) that allows it to interact with other resources belonging to the same private network. That VPC itself was created as an object in the same file and it is easy for us to refer to it from within the code itself. The roles and permissions needed to allow the Lambda to participate in the VPC will be created under the hood. While a lot of complexity is abstracted away, it is not magic: the CloudFormation templates are auto-generated, but, if needed, we can go over them and verify that everything is as it should.
+        </p>
+
+        <p>
+          Our main deployment file is about 150 lines of code and that file generates more than a thousand lines of CloudFormation templates, these long YAML files. For us, this was a clear win.
+        </p>
+
+        <h2 id="how-to-use-river">8) How to use River</h2>
+
+        <p>
+          In the previous sections, we described how we built River and automated its deployment. What we want to emphasize at this point is that our goal was to take that complexity away and provide a tool that is easy to use. This is the topic of this concluding section.
+        </p>
 
         <h3>8.1) Deployment</h3>
 
         <p>
-          Apex, as is, represents a single point of failure for a system. To protect it from being
-          overwhelmed by bursty traffic, a best practice is to deploy a FIFO (‘first in, first out’)
-          queue in front of <code>apex-proxy</code>. Another option we are considering is to deploy
-          a standard queue without FIFO guarantees, which offers higher throughput rates, but
-          requires additional middleware in <code>apex-proxy</code> to ensure messages are consumed
-          in the right order.
+          Deploying River is one command: after cloning the repository, the developer only needs to type `cdk deploy "*"`.
         </p>
+
+        <div class="img-wrapper">
+          <img
+            src="images/example.png"
+            alt="deployment-gif"
+          />
+        </div>
+
+        <p>
+          The end result is that all the resources needed will be created on the user's AWS account. The deployment process takes a while, as seen in the below screenshot, but it is meant to be done once. Similarly, it is one command to roll back all these changes, so it makes it easy for application developers to test if River is a good fit for their needs. This is one of the big advantages of a well-automated deployment process.
+        </p>
+
+        <div class="img-wrapper">
+          <img
+            src="images/example.png"
+            alt="resources screenshot"
+          />
+        </div>
 
         <h3>8.2) Libraries</h3>
 
         <p>
-          While Docker volumes offer strong persistence guarantees for Apex’s logs and configuration
-          data, the compute instances (e.g. AWS EC2) hosting the containers are ephemeral and not
-          suitable for long-term storage. For users who need even stronger persistence guarantees,
-          <code>apex-logs-db</code> and <code>apex-config-store</code> can be configured to
-          periodically back up data to a cloud storage service (e.g. AWS S3 and S3 Glacier).
+          As we mentioned in the beginning, River is meant to be used alongside an existing application: besides deploying it, the developer will also need to interact with it. This is what the outputs are for. They provide the load balancer endpoint through which clients will establish the connection, the API Gateway endpoint needed to publish events, an API key, and a secret needed for security reasons.
+        </p>
+
+        <p>
+          We provide libraries with a clean and simple interface to make it easy to interact with River.
+        </p>
+
+        <h4>8.2.1) Server-side</h4>
+
+        <div class="img-wrapper">
+          <img
+            src="images/example.png"
+            alt="server-side-code"
+          />
+        </div>
+
+        <p>
+          This is an example Express app on the server-side. The application developer can simply include the River library as a module. He initializes it with his own API Gateway endpoint and key. Whenever the developer wants to publish a message, he simply needs to add one line of code. In this example, every time a POST request is received for the “add-task” path, that event will be published.
+        </p>
+
+        <h4>8.2.2) Client-side</h4>
+
+        <div class="img-wrapper">
+          <img
+            src="images/example.png"
+            alt="client-side-code"
+          />
+        </div>
+
+        <p>
+          Similarly, on the client-side, the developer can include River as a module. If he is not working in a WebPack-like environment, we also have a script that exposes a global variable. The developer only needs to provide his load balancer endpoint and a valid JSON Web Token.
+        </p>
+
+        <p>
+          Subscribing to any channel is one line of code. The developer can instruct River on how it should react to specific events with an event name and a callback function.
+        </p>
+
+        <h4>8.2.3) A simple demo</h4>
+
+        <div class="img-wrapper">
+          <img
+            src="images/example.png"
+            alt="demo-gif"
+          />
+        </div>
+
+        <p>
+          As the end result of these few lines of code, an existing application is now transformed into a real-time application. These are two different browser tabs and they represent two users that could live in different cities. When one user updates the state of the application, the UI gets immediately updated for both users, without the need to issue an HTTP request. On the functionality level, our goal is achieved. This is, of course, a very simple demo but the publish-subscribe functionality can be used in many scenarios where developers want to easily add real-time to an existing application.
         </p>
 
         <h3>8.3) Authentication</h3>
 
+        <h4>8.3.1) JSON Web Tokens</h4>
+
         <p>
-          Currently, every incoming request to Apex triggers multiple reads from the Redis
-          <code>apex-config-store</code>. As Apex is designed for small teams with a finite and
-          small number of services, most of these reads from Redis will be for the same
-          configuration data. Therefore, we can significantly reduce the read rate by caching a copy
-          of all configuration data in memory within <code>apex-proxy</code>. This of course creates
-          the new problem of cache invalidation - any changes in Redis must now be propagated to
-          <code>apex-proxy</code> e.g. through an extra REST endpoint in <code>apex-proxy</code>.
+          Previously we had mentioned the problem of how does this separate service know who is connecting to it? Our solution was to use JSON Web Tokens.
+        </p>
+
+        <p>
+          JSON Web Token (JWT) is an internet standard described in RFC 7519 (https://tools.ietf.org/html/rfc7519). It is described here as a “compact, URL-safe means of representing claims to be transferred between two parties.” 
+        </p>
+
+        <div class="img-wrapper">
+          <img
+            src="images/example.png"
+            alt="jwt"
+          />
+        </div>
+
+        <p>
+          When River is deployed, a 256-bit secret key is generated, which is then used to digitally sign JWTs. These tokens are what allows River to be decoupled from the application server, but also able to authenticate clients.  When a client connects to River, a valid JWT is expected.
+        </p>
+
+        <p>
+          Let’s look at an example of how these tokens might be generated and passed around among the three pieces of our “triangular” pattern.
+        </p>
+
+        <h4>8.3.2) Example workflow</h4>
+
+        <div class="img-wrapper">
+          <img
+            src="images/example.png"
+            alt="jwt"
+          />
+        </div>
+
+        <p>
+          After River generates the 256-bit secret, this secret is shared with the existing application.
+        </p>
+
+        <div class="img-wrapper">
+          <img
+            src="images/example.png"
+            alt="jwt"
+          />
+        </div>
+
+        <p>
+          Before attempting to connect to River, the client requests a JWT from the application server, and sends along its cookies.
+        </p>
+
+        <div class="img-wrapper">
+          <img
+            src="images/example.png"
+            alt="jwt"
+          />
+        </div>
+
+        <p>
+          And since this client is presumably logged in, the server will have some notion of who this client is from its cookies, and will verify that indeed this client should receive a JWT. The server then generates and returns a valid JWT, signed with the River secret.
+        </p>
+
+        <div class="img-wrapper">
+          <img
+            src="images/example.png"
+            alt="jwt"
+          />
+        </div>
+
+        <p>
+          The client then establishes a connection with River. Note that River allows a connection to be established from any client, but it expects a valid JWT within the first fifteen seconds of connection, otherwise the connection is terminated.
+        </p>
+
+        <div class="img-wrapper">
+          <img
+            src="images/example.png"
+            alt="jwt"
+          />
+        </div>
+
+        <p>
+          The client then sends a WebSocket message containing the valid JWT. River uses the secret to verify the JWT.
+        </p>
+
+        <div class="img-wrapper">
+          <img
+            src="images/example.png"
+            alt="jwt"
+          />
+        </div>
+
+        <p>
+          River sends back a message notifying the client of successful authentication. Finally, River adds this client to its pool of authenticated clients, which allows it to subscribe to channels and receive messages on those channels.
+        </p>
+
+        <p>
+          Note that this is just an example workflow, and River doesn’t make any demands on how JTWs are issued, passed around, or how their expiration time is set. This is left up to the application developer using River. River only requires a valid JSON Web Token within that first 15 seconds of connection.
+        </p>
+
+        <div class="img-wrapper">
+          <img
+            src="images/example.png"
+            alt="jwt"
+          />
+        </div>
+
+        <h3>8.4) Load testing</h3>
+
+        <p>
+          Recall that one of our goals for River was to be ready to scale. To know if we had actually met that goal, we needed to test River under some sort of load and attempt to simulate, as much as possible, real-world conditions of a small to medium application.
+        </p>
+
+        <h4>8.4.1) Goals</h4>
+
+        <p>
+          To know if River could stand up to the demands of a small to medium web application, we set some goal numbers. We wanted to have:
+        </p>
+
+        <ul>
+          <li>
+            thousands of stable, concurrent, open WebSocket connections
+          </li>
+          <li>
+            thousands of messages per second being sent by the server
+          </li>
+          <li>
+            100 new connections per second
+          </li>
+        </ul>
+
+        <h4>8.4.2) Setup</h4>
+
+        <p>
+          To synthetically generate clients, we used the artillery.io testing library, which gives native support to socket.io, River’s underlying engine.  We set up two EC2 instances to run artillery. We used two instead of one, because if we asked artillery.io to generate clients too quickly, it generated “high CPU” warnings, which could have led to erroneous test results. So we split the load of creating clients onto two EC2 instances.
+        </p>
+
+        <div class="img-wrapper">
+          <img
+            src="images/example.png"
+            alt="testing-diagram"
+          />
+        </div>
+
+        <p>
+          Two containers was just an arbitrary number we picked, so we could extrapolate how much load the system could handle for a given number of containers.  In our task definition for the container, we can specify how many virtual CPUs and memory to give our container. We chose one virtual CPU and two gigabytes of memory.
+        </p>
+
+        <p>
+          To have our server generate lots of WebSocket messages, we used the concept of a “presence channel”. This is a special kind of channel, where, when a client subscribes, this subscription event prompts the server to send a message to all the existing subscribers on the channel.
+        </p>
+
+        <div class="img-wrapper">
+          <img
+            src="images/example.png"
+            alt="presence-channel-diagram"
+          />
+        </div>
+
+        <p>
+          In the above diagram, we see a fourth subscriber on the left, causing the server to send a message to each of the three existing subscribers. One can imagine, as the number of subscribers grows, the number of messages being sent each second grows very quickly. For example, the 1,000th subscriber to this presence channel will prompt the server to send 999 messages, and if we are generating many, many clients every second, you can see that there will be a lot of messages flying around once we have many clients connected and subscribed.
+        </p>
+
+        <h4>8.4.3) Tuning the task definition</h4>
+
+        <p>
+          At first the test was resulting in a lot (3,000 out of 10,000) of XHR Polling errors once above about 7,000 connections. This meant that the connections were dropping and the socket.io clients were falling back to polling, but the polling was failing.
+        </p>
+
+        <p>
+          To remedy this, we increased the "nofile" ulimits of the container, allowing more open files, since each new connection results in a new file being opened. ECS gives a soft limit default of 1024 and a hard limit default of 4096, so it makes sense that we were seeing connection errors as we closed in on 7,000 connections with two tasks (containers) running.
+        </p>
+
+        <p>
+          ulimits were increased to the following:
+        </p>
+
+        <code>
+          "ulimits": [
+                {
+                    "name": "nofile",
+                    "softLimit": 50000,
+                    "hardLimit": 65536
+                }
+            ],
+        </code>
+
+        <p>
+          Once this was updated, the test ran without any errors.
+        </p>
+
+        <h4>8.4.4) Results</h4>
+
+        <ul>
+          <li>
+            20,000 concurrent connections without errors
+          </li>
+          <li>
+            to start, 100 new connections/second
+          </li>
+          <li>
+            at end, 15-20 new connections/second
+          </li>
+          <li>
+            at peak, servers sending “presence channel” messages at a rate of 300,000 messages/second
+          </li>
+        </ul>
+
+        <p>
+          Once we adjusted the ulimits parameters, we were able to support 20,000 concurrent connections, without any errors.  At the beginning of the test, River was able to add 100 new connections per second, but by the time we got to the end of the phase of the test where we were adding clients, this rate decreased to about 15 new connections per second, probably due to the large number of presence channel messages flying around at that point.
+        </p>
+
+        <p>
+          During the peak of the presence channel messages, we estimate these were being sent at the rate of 300,000 messages per second. This may sound like a lot of messages, but keep in mind that these are very lightweight, text-based messages, around 37 bytes each. Also note that these are not HTTP request-response cycles, but messages being sent over an existing TCP connection, our WebSocket connection.
+        </p>
+
+        <p>
+          Despite not reaching the goal of a steady addition of 100 users per second, we felt that we met our overall goal for River to be useful as a real-time service within the context of small to medium web applications.
+        </p>
+
+        <h2 id="future-work">9) Future work</h2>
+
+        <p>
+          We are proud of what we have accomplished with River. It fills in a gap in the real-time-as-a-service space by providing an easy-to-deploy and robust infrastructure able to handle up to 20,000 concurrent connections with zero error. Of course, if you're planning on building the next Netflix, River would not be the right choice. But for small to medium-sized applications looking for an easy way to add real-time functionality, River is a great fit.
+        </p>
+
+        <p>
+          That being said, we do have a backlog of improvements that we plan to work on in the future.
+        </p>
+
+        <h3>9.1) Encrypted Websockets, out-of-the-box</h3>
+
+        <p>
+          AWS gives us a secure, TLS-encrypted endpoint for the API Gateway service, where back-end services publish events, but its Application Load Balancer service, the endpoint where clients connect via WebSockets, does not come with TLS out of the box. To enable secure WebSockets, a developer using River would need to add their custom domain and encryption keys to the Application Load Balancer service. This is a straightforward task, but we would like to add an option during deployment so that this could be automated. 
+        </p>
+
+        <h3>9.2) Leverage AWS for better security</h3>
+
+        <p>
+          Right now we have an API key and secret for authentication, but we could better leverage some AWS services to provide stronger security for both the API Gateway, and the secret that validates JSON Web Tokens. We could leverage the AWS Cognito service as an identity provider for JSON Web Token authorization for the API Gateway. AWS also has a service called “Secrets Manager”, that would allow a rotating secret for River’s WebSocket server.
+        </p>
+
+        <h3>9.3) Message history cache</h3>
+
+        <p>
+          Finally, a feature we would like to add is a message-history cache for dropped connections. Imagine if a user lost her WebSocket connection for a short period of time, like going between cell towers, or a train going through a tunnel. Then when she reconnects, she picks up with River right where she left off, not by accessing the application’s database, but by accessing River’s cache of recent messages.
         </p>
 
         <section id="footnotes">
