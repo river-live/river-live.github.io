@@ -151,7 +151,6 @@
             These events become available to web clients in <b>real-time</b>.
           </p>
 
-          <p>These events will become available to web clients in real-time.</p>
         </div>
       </article>
     </section>
@@ -185,7 +184,7 @@
 
       <article class="box">
         <div class="text-box">
-          <h1>Deploy your real-time infrastructure in <b>one</b> command.</h1>
+          <h1>Deploy your real-time infrastructure in <em>one</em> command.</h1>
 
           <p>
             No changes required in how your existing application is deployed.
@@ -411,9 +410,7 @@
           will explore the idea of a separate real-time service in more depth.
         </p>
 
-        <h2 id="a-separate-real-time-service">
-          3) A separate real-time service
-        </h2>
+        <h2 id="a-separate-service">3) A separate service</h2>
 
         <h3>3.1) A separate server</h3>
 
@@ -849,11 +846,11 @@
           categories. On one side, there are many open-source libraries to serve
           a very wide variety of needs. We have looked at quite a few of them
           and they were certainly an inspiration to us while designing River.
-          Centrifugo, for example, is a scalable real-time messaging server
+          <a href="https://centrifugal.github.io/centrifugo/">Centrifugo</a>, for example, is a scalable real-time messaging server
           written in Go. It runs as a separate service and maintains persistent
           WebSocket connections with clients. It follows a very similar pattern
           to what we previously described and presents itself as a user-facing
-          pub/sub server. Its use case is very similar to ours. It has been
+          pub/sub server [<a href="#footnote-16x">16x</a>]. Its use case is very similar to ours. It has been
           tested at scale and is under active development. On the downside,
           while it has been used at scale, it is not out-of-the-box ready to
           scale. The deployment scenario is left to the application developer:
@@ -865,14 +862,14 @@
 
         <p>
           On the other side of this problem space, there are many profitable
-          companies that offer hosted paid services. Pusher is one of the major
+          companies that offer hosted paid services. <a href="https://pusher.com/">Pusher</a> is one of the major
           players in this space and it offers many advantages for application
           developers. It is very easy to use. It provides a simple web interface
           for creating real-time APIs, libraries for multiple languages, and
           strong guarantees. On the downside, it is not open-source and,
           depending on usage, it can be expensive. The free plan only supports
           up to 100 concurrent connections. To support 10,000 concurrent
-          connections, Pusher charges $500 per month.
+          connections, Pusher charges $500 per month [<a href="#footnote-17x">17x</a>].
         </p>
 
         <p>
@@ -889,21 +886,22 @@
         </p>
 
         <div class="img-wrapper">
-          <img src="images/example.png" alt="solutions-table" />
+          <img src="images/diagrams/39_existing-solutions-table.png"
+            alt="A table comparing different solutions and their tradeoffs" />
         </div>
 
         <h3>5.3) DAZN in-house WebSocket solution</h3>
 
         <p>
           There is another non-open-source solution we looked at and want to
-          mention. DAZN is a sports streaming company. We were interested in a
+          mention. <a href="https://www.dazn.com/">DAZN</a> is a sports streaming company. We were interested in a
           specific problem they solved with their own in-house solution. The
           problem wasn’t the streaming itself of live events, but publishing
           live updates to millions of users eagerly waiting for this critical
           information. They looked at Amazon Web Services for a good solution
           and didn’t find something that matched their needs out-of-the-box. So
           they came up with their own solution and wrote a few good articles
-          about it.
+          about it [<a href="#footnote-18x">18x</a>].
         </p>
 
         <p>
@@ -916,7 +914,7 @@
         </p>
 
         <div class="img-wrapper">
-          <img src="images/example.png" alt="pubby-diagram" />
+          <img src="images/diagrams/41_pubby.png" alt="A diagram representing the infrastructure of Pubby, DAZN in-house WebSocket solution" />
         </div>
 
         <p>
@@ -2095,25 +2093,30 @@
               <a href="https://www.ably.io/documentation/core-features/channels"
                 target="_blank">https://www.ably.io/documentation/core-features/channels</a>
             </li>
-            <li id="footnote-16">
+            <li id="footnote-16x">
               <a
-                href="https://www.nginx.com/blog/do-i-need-a-service-mesh/"
+                href="https://centrifugal.github.io/centrifugo/getting_started/"
                 target="_blank"
-                >https://www.nginx.com/blog/do-i-need-a-service-mesh/</a
+                >https://centrifugal.github.io/centrifugo/getting_started/</a
               >
             </li>
-            <li id="footnote-17">
+            <li id="footnote-17x">
               <a
-                href="https://www.nginx.com/blog/microservices-reference-architecture-nginx-router-mesh-model/"
+                href="https://pusher.com/channels/pricing"
                 target="_blank"
-                >https://www.nginx.com/blog/microservices-reference-architecture-nginx-router-mesh-model/</a
+                >https://pusher.com/channels/pricing</a
               >
             </li>
-            <li id="footnote-18">
+            <li id="footnote-18x">
               <a
-                href="https://thenewstack.io/part-4-when-a-service-mesh-lite-proxy-is-right-for-your-organization/"
+                href="https://medium.com/dazn-tech/aws-serverless-websockets-at-scale-8a79cd5a9f3b"
                 target="_blank"
-                >https://thenewstack.io/part-4-when-a-service-mesh-lite-proxy-is-right-for-your-organization/</a
+                >https://medium.com/dazn-tech/aws-serverless-websockets-at-scale-8a79cd5a9f3b</a
+              >,
+              <a
+                href="https://medium.com/dazn-tech/introducing-pubby-our-custom-websockets-solution-c5764e3a7dcb"
+                target="_blank"
+                >https://medium.com/dazn-tech/introducing-pubby-our-custom-websockets-solution-c5764e3a7dcb</a
               >
             </li>
             <li id="footnote-19">
