@@ -1764,24 +1764,28 @@
         </p>
 
         <h3>8.3) Authentication</h3>
-
-        <h4>8.3.1) JSON Web Tokens</h4>
-
         <p>
           Previously we had mentioned the problem of how does this separate
           service know who is connecting to it? Our solution was to use JSON Web
           Tokens.
         </p>
 
+        <h4>8.3.1) JSON Web Tokens</h4>
+
         <p>
-          JSON Web Token (JWT) is an internet standard described in RFC 7519
-          (https://tools.ietf.org/html/rfc7519). It is described here as a
+          JSON Web Token (JWT) is an internet standard described in RFC 7519[<a
+            href="#footnote-45"
+            >45</a
+          >] (https://tools.ietf.org/html/rfc7519). It is described here as a
           “compact, URL-safe means of representing claims to be transferred
           between two parties.”
         </p>
 
         <div class="img-wrapper">
-          <img src="images/example.png" alt="jwt" />
+          <img
+            src="images/diagrams/68_jwt-secret-generated.png"
+            alt="JSON web token secret generated upon deployment"
+          />
         </div>
 
         <p>
@@ -1800,7 +1804,10 @@
         <h4>8.3.2) Example workflow</h4>
 
         <div class="img-wrapper">
-          <img src="images/example.png" alt="jwt" />
+          <img
+            src="images/diagrams/69_jwt-secret-shared.png"
+            alt="secret shared with existing application"
+          />
         </div>
 
         <p>
@@ -1809,7 +1816,10 @@
         </p>
 
         <div class="img-wrapper">
-          <img src="images/example.png" alt="jwt" />
+          <img
+            src="images/diagrams/70_jwt-client-request-jwt.png"
+            alt="client requests JSON web token from application server"
+          />
         </div>
 
         <p>
@@ -1818,7 +1828,10 @@
         </p>
 
         <div class="img-wrapper">
-          <img src="images/example.png" alt="jwt" />
+          <img
+            src="images/diagrams/71_jwt-server-create-jwt.png"
+            alt="server creates json web token using shared secret"
+          />
         </div>
 
         <p>
@@ -1829,7 +1842,10 @@
         </p>
 
         <div class="img-wrapper">
-          <img src="images/example.png" alt="jwt" />
+          <img
+            src="images/diagrams/72_jwt-client-connects.png"
+            alt="client connects to River via websocket"
+          />
         </div>
 
         <p>
@@ -1840,7 +1856,10 @@
         </p>
 
         <div class="img-wrapper">
-          <img src="images/example.png" alt="jwt" />
+          <img
+            src="images/diagrams/73_jwt-client-sends-jwt.png"
+            alt="client sends json web token to River"
+          />
         </div>
 
         <p>
@@ -1849,7 +1868,10 @@
         </p>
 
         <div class="img-wrapper">
-          <img src="images/example.png" alt="jwt" />
+          <img
+            src="images/diagrams/74_jwt-river-auth.png"
+            alt="River authenticates using secret to verify json web token"
+          />
         </div>
 
         <p>
@@ -1867,17 +1889,13 @@
           seconds of connection.
         </p>
 
-        <div class="img-wrapper">
-          <img src="images/example.png" alt="jwt" />
-        </div>
-
         <h3>8.4) Load testing</h3>
 
         <p>
           Recall that one of our goals for River was to be ready to scale. To
           know if we had actually met that goal, we needed to test River under
           some sort of load and attempt to simulate, as much as possible,
-          real-world conditions of a small to medium application.
+          real-world conditions of a small to medium web application.
         </p>
 
         <h4>8.4.1) Goals</h4>
@@ -1906,7 +1924,10 @@
         </p>
 
         <div class="img-wrapper">
-          <img src="images/example.png" alt="testing-diagram" />
+          <img
+            src="images/diagrams/77_loadtest-setup.png"
+            alt="loadtest setup with artillery.io"
+          />
         </div>
 
         <p>
@@ -1926,7 +1947,10 @@
         </p>
 
         <div class="img-wrapper">
-          <img src="images/example.png" alt="presence-channel-diagram" />
+          <img
+            src="images/diagrams/78_loadtest-presence-channel.png"
+            alt="presence-channel explanation, one client subscribes, notifying other three clients"
+          />
         </div>
 
         <p>
@@ -1950,10 +1974,10 @@
         </p>
 
         <p>
-          To remedy this, we increased the "nofile" ulimits of the container,
-          allowing more open files, since each new connection results in a new
-          file being opened. ECS gives a soft limit default of 1024 and a hard
-          limit default of 4096, so it makes sense that we were seeing
+          To remedy this, we increased the "nofile" <code>ulimits</code> of the
+          container, allowing more open files, since each new connection results
+          in a new file being opened. ECS gives a soft limit default of 1024 and
+          a hard limit default of 4096, so it makes sense that we were seeing
           connection errors as we closed in on 7,000 connections with two tasks
           (containers) running.
         </p>
