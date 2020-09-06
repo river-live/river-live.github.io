@@ -427,15 +427,15 @@
         <p>
           An interesting data point when looking at improving the performance of
           web applications is metadata overhead. These numbers are taken from
-          the book High-Performance Browser Networking [<a href="#footnote-8"
+          the book <em>High-Performance Browser Networking</em> [<a href="#footnote-8"
             >8</a
           >]:
         </p>
 
         <ul>
-          <li>WebSocket protocol: 2-14 bytes of overhead</li>
-          <li>Server-Sent Events: 5 bytes of overhead</li>
-          <li>HTTP 1.x: 500-800 bytes of HTTP metadata, plus cookies</li>
+          <li><b>WebSocket protocol</b>: 2-14 bytes of overhead</li>
+          <li><b>Server-Sent Events</b>: 5 bytes of overhead</li>
+          <li><b>HTTP 1.x</b>: 500-800 bytes of HTTP metadata, plus cookies</li>
         </ul>
 
         <p>
@@ -635,7 +635,7 @@
         <p>
           While the pub/sub pattern is often associated with Event-Driven
           Architecture in the context of backend services, River is not an
-          internal message broker like Apache Kafka. We find event streaming to
+          internal message broker like <a href="https://kafka.apache.org/" target="_blank">Apache Kafka</a>. We find event streaming to
           be a very powerful model, but we had a more modest goal in mind: a
           real-time service responsible for managing WebSocket connections.
           Thus, it is important to keep in mind that we are talking about a
@@ -687,9 +687,7 @@
           in the next section.
         </p>
 
-        <h2 id="adding-real-time-functionality">
-          4) Adding real-time functionality
-        </h2>
+        <h2 id="adding-real-time">4) Adding real-time</h2>
 
         <p>
           In this section, we will look at what is needed to add real-time
@@ -1426,13 +1424,13 @@
         </p>
 
         <blockquote>
-          “Historically, building WebSocket APIs required setting up fleets of
+          Historically, building WebSocket APIs required setting up fleets of
           hosts that were responsible for managing the persistent connections
           that underlie the WebSocket protocol. Now, with API Gateway, this is
           no longer necessary. API Gateway handles the connections between the
           client and service. It lets you build your business logic using
           HTTP-based backends such as AWS Lambda, Amazon Kinesis, or any other
-          HTTP endpoint.”[<a href="#footnote-23">23</a>]
+          HTTP endpoint. [<a href="#footnote-23">23</a>]
         </blockquote>
 
         <p>
@@ -1469,11 +1467,11 @@
         </p>
 
         <blockquote>
-          “There’s no way to broadcast messages to all connected clients with
+          There’s no way to broadcast messages to all connected clients with
           one API call. In fact, you need to make an API call for each
           connection you want to send a message to. Publishing a single update
           to 1m clients requires fetching all 1m connection IDs out of the
-          database and making 1m API calls, which is a deal breaker.” S. Tabor,
+          database and making 1m API calls, which is a deal breaker. S. Tabor,
           Introducing Pubby our custom WebSockets solution[<a
             href="#footnote-24"
             >25</a
@@ -1538,7 +1536,20 @@
         <h3>7.1) Interacting with AWS</h3>
 
         <div class="img-wrapper">
-          <img src="images/diagrams/example.png" alt="aws-services-diagram" />
+          <figure>
+            <img
+              src="images/diagrams/55_AWS-interactions.png"
+              alt="A diagram representing different ways to interact with AWS"
+            />
+            <figcaption>
+              Diagram from:
+              <a
+                href="https://www.manning.com/books/amazon-web-services-in-action"
+                target="_blank"
+                >AWS in Action</a
+              >
+            </figcaption>
+          </figure>
         </div>
 
         <p>
@@ -1587,7 +1598,19 @@
         <h4>7.2.1) With AWS CLI</h4>
 
         <div class="img-wrapper">
-          <img src="images/example.png" alt="lambda-cli-diagram" />
+          <figure>
+            <img
+              src="images/diagrams/56_lambda-cli.png"
+              alt="A screenshot of the AWS documentation for creating a Lambda function"
+            />
+            <figcaption>
+              <a
+                href="https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-awscli.html"
+                target="_blank"
+                >AWS documentation</a
+              >
+            </figcaption>
+          </figure>
         </div>
 
         <p>
@@ -1627,14 +1650,25 @@
         </p>
 
         <div class="img-wrapper">
-          <img src="images/example.png" alt="aws-cloudformation-diagram" />
+          <figure>
+            <img
+              src="images/diagrams/57_lambda-cloudformation.png"
+              alt="A screenshot of a CloudFormation template for creating a Lambda function"
+            />
+            <figcaption>
+              <a
+                href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html"
+                target="_blank"
+                >AWS documentation</a
+              >
+            </figcaption>
+          </figure>
         </div>
 
         <h4>7.2.3) With AWS Cloud Development Kit</h4>
 
         <p>
-          While researching better options, we came across AWS Cloud Development
-          Kit (CDK). It is an abstraction on top of AWS CloudFormation templates
+          While researching better options, we came across <a href="https://aws.amazon.com/cdk/" target="_blank">AWS Cloud Development Kit</a> (CDK). It is an abstraction on top of AWS CloudFormation templates
           that makes them much easier to work with. AWS CDK is a very
           interesting concept as it allows developers to write code in a
           familiar language, e.g. JavaScript or Python, and model their
@@ -1658,7 +1692,7 @@
         </p>
 
         <div class="img-wrapper">
-          <img src="images/example.png" alt="aws-cdk-diagram" />
+          <img src="images/diagrams/59_lambda-cdk.png" alt="A code snippet showing how to use AWS CDK to create a Lambda function" />
         </div>
 
         <p>
@@ -1669,10 +1703,8 @@
           abstracted away from the developer.
         </p>
 
-        <code>add vpc line</code>
-
         <p>
-          This line is all that is needed to include the Lambda in a Virtual
+          The line <code>vpc: props.vpc</code> is all that is needed to include the Lambda in a Virtual
           Private Cloud (VPC) that allows it to interact with other resources
           belonging to the same private network. That VPC itself was created as
           an object in the same file and it is easy for us to refer to it from
@@ -1702,11 +1734,11 @@
 
         <p>
           Deploying River is one command: after cloning the repository, the
-          developer only needs to type `cdk deploy "*"`.
+          developer only needs to type <code>cdk deploy "*"</code>.
         </p>
 
         <div class="img-wrapper">
-          <img src="images/example.png" alt="deployment-gif" />
+          <img src="images/gifs/cdk-deploy.gif" alt="A GIF showing the deployment of resources from the terminal" />
         </div>
 
         <p>
@@ -1720,7 +1752,7 @@
         </p>
 
         <div class="img-wrapper">
-          <img src="images/example.png" alt="resources screenshot" />
+          <img src="images/diagrams/62_river-outputs.png" alt="A screenshot showing both the resources created on an AWS account and the outputs seen in the terminal" />
         </div>
 
         <h3>8.2) Libraries</h3>
@@ -1742,7 +1774,7 @@
         <h4>8.2.1) Server-side</h4>
 
         <div class="img-wrapper">
-          <img src="images/example.png" alt="server-side-code" />
+          <img src="images/diagrams/64_server-library.png" alt="Server-side code showing how to use River" />
         </div>
 
         <p>
@@ -1757,7 +1789,7 @@
         <h4>8.2.2) Client-side</h4>
 
         <div class="img-wrapper">
-          <img src="images/example.png" alt="client-side-code" />
+          <img src="images/diagrams/65_client-library.png" alt="Client-side code showing how to use River" />
         </div>
 
         <p>
@@ -1776,7 +1808,7 @@
         <h4>8.2.3) A simple demo</h4>
 
         <div class="img-wrapper">
-          <img src="images/example.png" alt="demo-gif" />
+          <img src="images/gifs/todo-realtime.gif" alt="A GIF showing a demo real-time application" />
         </div>
 
         <p>
@@ -2010,12 +2042,7 @@
           (containers) running.
         </p>
 
-        <p>ulimits were increased to the following:</p>
-
-        <code>
-          "ulimits": [ { "name": "nofile", "softLimit": 50000, "hardLimit":
-          65536 } ],
-        </code>
+        <p>ulimits were increased to the following: <code>"ulimits": [ { "name": "nofile", "softLimit": 50000, "hardLimit": 65536 } ]</code></p>
 
         <p>Once this was updated, the test ran without any errors.</p>
 
@@ -2127,7 +2154,7 @@
               >
             </li>
             <li id="footnote-3">
-              A <code>keepalive</code> connection is the default since HTTP/1.1,
+              A keepalive connection is the default since HTTP/1.1,
               see
               <a href="https://hpbn.co/brief-history-of-http/" target="_blank"
                 >https://hpbn.co/brief-history-of-http/</a
@@ -2340,36 +2367,6 @@
             title="Freepik"
             target="_blank"
             >Freepik</a
-          >,
-          <a
-            href="https://www.flaticon.com/authors/those-icons"
-            title="Those Icons"
-            target="_blank"
-            >Those Icons</a
-          >,
-          <a
-            href="https://www.flaticon.com/authors/kiranshastry"
-            title="Kiranshastry"
-            target="_blank"
-            >Kiranshastry</a
-          >,
-          <a
-            href="https://www.flaticon.com/authors/smashicons"
-            title="Smashicons"
-            target="_blank"
-            >Smashicons</a
-          >,
-          <a
-            href="https://www.flaticon.com/authors/pixel-perfect"
-            title="Pixel perfect"
-            target="_blank"
-            >Pixel perfect</a
-          >, and
-          <a
-            href="https://www.flaticon.com/authors/eucalyp"
-            title="Eucalyp"
-            target="_blank"
-            >Eucalyp</a
           >
           from
           <a href="https://www.flaticon.com/" title="Flaticon" target="_blank">
@@ -2389,7 +2386,7 @@
 
       <ul>
         <li class="individual">
-          <img src="" alt="Catherine Emond" />
+          <img src="images/avatars/catherine-profile.jpg" alt="Catherine Emond" />
 
           <h3>Catherine Emond</h3>
 
@@ -2403,7 +2400,7 @@
             </li>
 
             <li>
-              <a href="https://github.com/catherineemond" target="_blank">
+              <a href="https://catherineemond.github.io/" target="_blank">
                 <img src="images/icons/website_icon.png" alt="website" />
               </a>
             </li>
