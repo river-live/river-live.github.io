@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
     e.preventDefault();
     $([document.documentElement, document.body]).animate(
       {
-        scrollTop: $("#what-is-river?").offset().top,
+        scrollTop: $("#what-is-river").offset().top,
       },
       2000
     );
@@ -43,9 +43,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const snakeCaseify = (text) => text.toLowerCase().split(/ +/).join("-");
 
   const removeAmpersand = (text) => text.replace("&", "");
+  const removeQuestionMark = (text) => text.replace("?", "");
 
   const h2Text = [...document.querySelectorAll("h2")].map((h2) =>
-    h2.textContent.split(" ").slice(1).join(" ")
+    removeQuestionMark(h2.textContent).split(" ").slice(1).join(" ")
   );
 
   const paddingAllowanceAboveHeading = 30;
