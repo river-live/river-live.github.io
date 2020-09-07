@@ -135,11 +135,6 @@ a:hover {
   padding-top: 40px;
 }
 
-.integration img#banner-deploy {
-  padding-top: 0;
-  width: 85%;
-}
-
 main > section {
   margin: 80px 0 100px 0;
   width: 75%;
@@ -203,6 +198,15 @@ img {
   top: 20px;
   right: 33px;
   z-index: 4;
+}
+
+#rocket-logo {
+  padding-top: 0;
+  width: 200px;
+}
+
+#banner-deploy {
+  padding-top: 50px;
 }
 
 #github-logo {
