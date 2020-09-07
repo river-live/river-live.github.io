@@ -322,9 +322,11 @@
           Long-polling is an attempt to improve the situation by having the
           server "wait" after receiving the HTTP request, allowing it to respond
           only when there are new events to be sent. While it is an improvement,
-          the general impression - as stated in the RFC6202 [<a href="#footnote-4">4</a>]
-          - is that long polling "strech[es] the original semantics of HTTP and
-          that the HTTP protocol was not designed for bidirectional
+          the general impression - as stated in the RFC6202 [<a
+            href="#footnote-4"
+            >4</a
+          >] - is that long polling "strech[es] the original semantics of HTTP
+          and that the HTTP protocol was not designed for bidirectional
           communication".
         </p>
 
@@ -351,7 +353,10 @@
           and Slack. They are also what we chose to use with River. They are not
           new: the RFC for the WebSocket protocol [<a href="#footnote-6">6</a>]
           came out in 2011, precisely to solve the challenges of real-time
-          communication. They are now supported by all major browsers [<a href="#footnote-7">7</a>]. WebSocket is a distinct protocol allowing for a persistent TCP
+          communication. They are now supported by all major browsers [<a
+            href="#footnote-7"
+            >7</a
+          >]. WebSocket is a distinct protocol allowing for a persistent TCP
           connection between server and client.
         </p>
 
@@ -390,7 +395,8 @@
         <p>
           An interesting data point when looking at improving the performance of
           web applications is metadata overhead. These numbers are taken from
-          the book <em>High-Performance Browser Networking</em> [<a href="#footnote-11"
+          the book <em>High-Performance Browser Networking</em> [<a
+            href="#footnote-11"
             >11</a
           >]:
         </p>
@@ -823,8 +829,8 @@
         </p>
 
         <p>
-          We can think of this publishing as an event about which all subscribed
-          clients will be notified.
+          We can think of this publishing as an <em>event</em> about which all
+          subscribed clients will be notified.
         </p>
 
         <div class="img-wrapper">
@@ -1029,7 +1035,7 @@
           achieve these goals, we had to make a few tradeoffs. First, River has
           a simple interface, and not many features or options. When River is
           deployed, there is no configuration. And it deploys on Amazon Web
-          Services only.
+          Services (AwS) only.
         </p>
         <div class="img-wrapper">
           <img
@@ -1044,7 +1050,7 @@
           market. It has a bewildering array of services, everything from a
           simple storage bucket to managing Internet of Things and even
           Satellites. AWS is robust, being the backend for huge companies like
-          Netflix, Pinterest and Slack.[<a href="#footnote-20">20</a>]
+          Netflix, Pinterest and Slack.[<a href="#footnote-22">22</a>]
         </p>
 
         <p>
@@ -1201,11 +1207,11 @@
         <h4>6.2.5) Load balancer</h4>
 
         <p>
-          We added a load balancer, in this case an Application Load Balancer,
-          which is a sub-service of AWS’s Elastic Load Balancing service. ALB
-          comes with native support for WebSockets, serves to distribute traffic
-          between our nodes, and provides a single point of entry for our
-          clients and services.
+          We added a load balancer, in this case an Application Load Balancer
+          (ALB), which is a sub-service of AWS’s Elastic Load Balancing service.
+          ALB comes with native support for WebSockets, serves to distribute
+          traffic between our nodes, and provides a single point of entry for
+          our clients and services.
         </p>
 
         <div class="img-wrapper">
@@ -1276,13 +1282,13 @@
 
         <p>
           Now we have the final version of our infrastructure. We have moved
-          from EC2 instances to Amazon’s Elastic Container Service. We have
-          taken our WebSocket server, and put it in a Docker container, which
-          allows us to focus solely on the business logic of River, and not
-          concern ourselves with server maintenance at all. We no longer have to
-          worry about Node.js version conflicts or logs filling up, and can
-          simply deploy our Docker container without thinking about underlying
-          dependencies.
+          from EC2 instances to Amazon’s Elastic Container Service (ECS). We
+          have taken our WebSocket server, and put it in a Docker container,
+          which allows us to focus solely on the business logic of River, and
+          not concern ourselves with server maintenance at all. We no longer
+          have to worry about Node.js version conflicts or logs filling up, and
+          can simply deploy our Docker container without thinking about
+          underlying dependencies.
         </p>
         <div class="img-wrapper">
           <img
@@ -1295,7 +1301,7 @@
           We also put our internal infrastructure inside a Virtual Private
           Cloud. This allows us to provision a logically isolated section of the
           AWS Cloud, and creates a virtual network over which we have complete
-          control. VPC docks link[<a href="#footnote-21">21</a>]
+          control. [<a href="#footnote-23">23</a>]
         </p>
 
         <h4>6.2.8) AWS Fargate</h4>
@@ -1304,9 +1310,9 @@
           Elastic Container Service is a fully-managed container orchestration
           service. At its core, ECS runs Docker containers.
         </p>
-        <div class="img-wrapper">
+        <!-- <div class="img-wrapper">
           <img src="images/diagrams/example.png" alt="new ECS diagram" />
-        </div>
+        </div> -->
 
         <p>
           Our Node.js process lives inside this Docker container, which is
@@ -1331,13 +1337,15 @@
         <p>
           ECS has two launch-type choices, the EC2 launch type, and the Fargate
           launch-type. We chose to use the Fargate launch-type, which Amazon
-          describes as “serverless compute for containers.” (link to ECS
-          docs)[<a href="#footnote-22">22</a>]
+          describes as “serverless compute for containers.”[<a
+            href="#footnote-24"
+            >24</a
+          >]
         </p>
 
         <p>
           With the EC2 launch-type (which we did <em>not</em> choose) the
-          developer still has to manage the EC2 instances on which ECS runs. The
+          developer still has to manage the instances on which ECS runs. The
           developer must provision and scale clusters, patch and update servers,
           and other tasks associated with server maintenance. In other words,
           the same problems we were trying to move away from when choosing a
@@ -1393,7 +1401,7 @@
           no longer necessary. API Gateway handles the connections between the
           client and service. It lets you build your business logic using
           HTTP-based backends such as AWS Lambda, Amazon Kinesis, or any other
-          HTTP endpoint. [<a href="#footnote-23">23</a>]
+          HTTP endpoint.[<a href="#footnote-25">25</a>]
         </blockquote>
 
         <p>
@@ -1430,16 +1438,15 @@
         </p>
 
         <blockquote>
-          There’s no way to broadcast messages to all connected clients with
-          one API call. In fact, you need to make an API call for each
-          connection you want to send a message to. Publishing a single update
-          to 1m clients requires fetching all 1m connection IDs out of the
-          database and making 1m API calls, which is a deal breaker. S. Tabor,
+          There’s no way to broadcast messages to all connected clients with one
+          API call. In fact, you need to make an API call for each connection
+          you want to send a message to. Publishing a single update to 1m
+          clients requires fetching all 1m connection IDs out of the database
+          and making 1m API calls, which is a deal breaker. S. Tabor,
           Introducing Pubby our custom WebSockets solution[<a
-            href="#footnote-24"
-            >25</a
+            href="#footnote-26"
+            >26</a
           >]
-          (https://medium.com/dazn-tech/introducing-pubby-our-custom-WebSockets-solution-c5764e3a7dcb)
         </blockquote>
 
         <p>
@@ -1631,7 +1638,11 @@
         <h4>7.2.3) With AWS Cloud Development Kit</h4>
 
         <p>
-          While researching better options, we came across <a href="https://aws.amazon.com/cdk/" target="_blank">AWS Cloud Development Kit</a> (CDK). It is an abstraction on top of AWS CloudFormation templates
+          While researching better options, we came across
+          <a href="https://aws.amazon.com/cdk/" target="_blank"
+            >AWS Cloud Development Kit</a
+          >
+          (CDK). It is an abstraction on top of AWS CloudFormation templates
           that makes them much easier to work with. AWS CDK is a very
           interesting concept as it allows developers to write code in a
           familiar language, e.g. JavaScript or Python, and model their
@@ -1655,7 +1666,10 @@
         </p>
 
         <div class="img-wrapper">
-          <img src="images/diagrams/59_lambda-cdk.png" alt="A code snippet showing how to use AWS CDK to create a Lambda function" />
+          <img
+            src="images/diagrams/59_lambda-cdk.png"
+            alt="A code snippet showing how to use AWS CDK to create a Lambda function"
+          />
         </div>
 
         <p>
@@ -1667,15 +1681,16 @@
         </p>
 
         <p>
-          The line <code>vpc: props.vpc</code> is all that is needed to include the Lambda in a Virtual
-          Private Cloud (VPC) that allows it to interact with other resources
-          belonging to the same private network. That VPC itself was created as
-          an object in the same file and it is easy for us to refer to it from
-          within the code itself. The roles and permissions needed to allow the
-          Lambda to participate in the VPC will be created under the hood. While
-          a lot of complexity is abstracted away, it is not magic: the
-          CloudFormation templates are auto-generated, but, if needed, we can go
-          over them and verify that everything is as it should.
+          The line <code>vpc: props.vpc</code> is all that is needed to include
+          the Lambda in a Virtual Private Cloud (VPC) that allows it to interact
+          with other resources belonging to the same private network. That VPC
+          itself was created as an object in the same file and it is easy for us
+          to refer to it from within the code itself. The roles and permissions
+          needed to allow the Lambda to participate in the VPC will be created
+          under the hood. While a lot of complexity is abstracted away, it is
+          not magic: the CloudFormation templates are auto-generated, but, if
+          needed, we can go over them and verify that everything is as it
+          should.
         </p>
 
         <p>
@@ -1701,7 +1716,10 @@
         </p>
 
         <div class="img-wrapper">
-          <img src="images/gifs/cdk-deploy.gif" alt="A GIF showing the deployment of resources from the terminal" />
+          <img
+            src="images/gifs/cdk-deploy.gif"
+            alt="A GIF showing the deployment of resources from the terminal"
+          />
         </div>
 
         <p>
@@ -1715,7 +1733,10 @@
         </p>
 
         <div class="img-wrapper">
-          <img src="images/diagrams/62_river-outputs.png" alt="A screenshot showing both the resources created on an AWS account and the outputs seen in the terminal" />
+          <img
+            src="images/diagrams/62_river-outputs.png"
+            alt="A screenshot showing both the resources created on an AWS account and the outputs seen in the terminal"
+          />
         </div>
 
         <h3>8.2) Libraries</h3>
@@ -1737,7 +1758,10 @@
         <h4>8.2.1) Server-side</h4>
 
         <div class="img-wrapper">
-          <img src="images/diagrams/64_server-library.png" alt="Server-side code showing how to use River" />
+          <img
+            src="images/diagrams/64_server-library.png"
+            alt="Server-side code showing how to use River"
+          />
         </div>
 
         <p>
@@ -1752,7 +1776,10 @@
         <h4>8.2.2) Client-side</h4>
 
         <div class="img-wrapper">
-          <img src="images/diagrams/65_client-library.png" alt="Client-side code showing how to use River" />
+          <img
+            src="images/diagrams/65_client-library.png"
+            alt="Client-side code showing how to use River"
+          />
         </div>
 
         <p>
@@ -1771,7 +1798,10 @@
         <h4>8.2.3) A simple demo</h4>
 
         <div class="img-wrapper">
-          <img src="images/gifs/todo-realtime.gif" alt="A GIF showing a demo real-time application" />
+          <img
+            src="images/gifs/todo-realtime.gif"
+            alt="A GIF showing a demo real-time application"
+          />
         </div>
 
         <p>
@@ -2005,7 +2035,13 @@
           (containers) running.
         </p>
 
-        <p>ulimits were increased to the following: <code>"ulimits": [ { "name": "nofile", "softLimit": 50000, "hardLimit": 65536 } ]</code></p>
+        <p>
+          ulimits were increased to the following:
+          <code
+            >"ulimits": [ { "name": "nofile", "softLimit": 50000, "hardLimit":
+            65536 } ]</code
+          >
+        </p>
 
         <p>Once this was updated, the test ran without any errors.</p>
 
@@ -2064,7 +2100,7 @@
           work on in the future.
         </p>
 
-        <h3>9.1) Encrypted Websockets, out-of-the-box</h3>
+        <h4>Encrypted Websockets, out-of-the-box</h4>
 
         <p>
           AWS gives us a secure, TLS-encrypted endpoint for the API Gateway
@@ -2077,7 +2113,7 @@
           during deployment so that this could be automated.
         </p>
 
-        <h3>9.2) Leverage AWS for better security</h3>
+        <h4>Leverage AWS for better security</h4>
 
         <p>
           Right now we have an API key and secret for authentication, but we
@@ -2089,7 +2125,7 @@
           rotating secret for River’s WebSocket server.
         </p>
 
-        <h3>9.3) Message history cache</h3>
+        <h4>Message history cache</h4>
 
         <p>
           Finally, a feature we would like to add is a message-history cache for
@@ -2117,14 +2153,15 @@
               >
             </li>
             <li id="footnote-3">
-              A keepalive connection is the default since HTTP/1.1,
-              see
+              A keepalive connection is the default since HTTP/1.1, see
               <a href="https://hpbn.co/brief-history-of-http/" target="_blank"
                 >https://hpbn.co/brief-history-of-http/</a
               >
             </li>
             <li id="footnote-4">
-              <a href="https://tools.ietf.org/html/rfc6202#section-2.2" target="_blank"
+              <a
+                href="https://tools.ietf.org/html/rfc6202#section-2.2"
+                target="_blank"
                 >https://tools.ietf.org/html/rfc6202#section-2.2</a
               >
             </li>
@@ -2143,16 +2180,12 @@
               >
             </li>
             <li id="footnote-6">
-              <a
-                href="https://tools.ietf.org/html/rfc6455"
-                target="_blank"
+              <a href="https://tools.ietf.org/html/rfc6455" target="_blank"
                 >https://tools.ietf.org/html/rfc6455</a
               >
             </li>
             <li id="footnote-7">
-              <a
-                href="https://caniuse.com/#search=WebSockets"
-                target="_blank"
+              <a href="https://caniuse.com/#search=WebSockets" target="_blank"
                 >https://caniuse.com/#search=WebSockets</a
               >
             </li>
@@ -2265,76 +2298,74 @@
                 >https://medium.com/dazn-tech/introducing-pubby-our-custom-websockets-solution-c5764e3a7dcb</a
               >
             </li>
-            <li id="footnote-19">
-              <a
-                href="https://konghq.com/blog/kong-service-mesh/"
-                target="_blank"
-                >https://konghq.com/blog/kong-service-mesh/</a
-              >
-            </li>
-            <li id="footnote-20">
-              <a
-                href="https://www.nginx.com/blog/microservices-reference-architecture-nginx-router-mesh-model/"
-                target="_blank"
-                >https://www.nginx.com/blog/microservices-reference-architecture-nginx-router-mesh-model/</a
-              >
-            </li>
-            <li id="footnote-21">
-              <a href="https://expressjs.com/" target="_blank"
-                >https://expressjs.com/</a
-              >
-            </li>
             <li id="footnote-22">
               <a
-                href="https://www.toptal.com/nodejs/why-the-hell-would-i-use-node-js"
+                href="https://en.wikipedia.org/wiki/Amazon_Web_Services"
                 target="_blank"
-                >https://www.toptal.com/nodejs/why-the-hell-would-i-use-node-js</a
+                >https://en.wikipedia.org/wiki/Amazon_Web_Services</a
               >
             </li>
             <li id="footnote-23">
-              <a
-                href="https://blog.timescale.com/blog/what-the-heck-is-time-series-data-and-why-do-i-need-a-time-series-database-dcf3b1b18563/"
-                target="_blank"
-                >https://blog.timescale.com/blog/what-the-heck-is-time-series-data-and-why-do-i-need-a-time-series-database-dcf3b1b18563/</a
+              <a href="https://aws.amazon.com/vpc/" target="_blank"
+                >https://aws.amazon.com/vpc/</a
               >
             </li>
             <li id="footnote-24">
+              <a href="https://aws.amazon.com/ecs/" target="_blank"
+                >https://aws.amazon.com/ecs/</a
+              >
+            </li>
+            <li id="footnote-25">
+              <a
+                href="https://aws.amazon.com/blogs/compute/announcing-websocket-apis-in-amazon-api-gateway/"
+                target="_blank"
+                >https://aws.amazon.com/blogs/compute/announcing-websocket-apis-in-amazon-api-gateway/</a
+              >
+            </li>
+            <li id="footnote-26">
+              <a
+                href="https://medium.com/dazn-tech/introducing-pubby-our-custom-WebSockets-solution-c5764e3a7dcb"
+                target="_blank"
+                >https://medium.com/dazn-tech/introducing-pubby-our-custom-WebSockets-solution-c5764e3a7dcb</a
+              >
+            </li>
+            <li id="footnote-27">
               <a
                 href="https://docs.timescale.com/latest/introduction/timescaledb-vs-postgres"
                 target="_blank"
                 >https://docs.timescale.com/latest/introduction/timescaledb-vs-postgres</a
               >
             </li>
-            <li id="footnote-25">
+            <li id="footnote-28">
               <a href="https://redis.io/topics/benchmarks" target="_blank"
                 >https://redis.io/topics/benchmarks</a
               >
             </li>
-            <li id="footnote-26">
+            <li id="footnote-29">
               <a
                 href="https://docs.timescale.com/latest/using-timescaledb/ingesting-data"
                 target="_blank"
                 >https://docs.timescale.com/latest/using-timescaledb/ingesting-data</a
               >
             </li>
-            <li id="footnote-27">
+            <li id="footnote-30">
               <a href="https://docs.docker.com/storage/" target="_blank"
                 >https://docs.docker.com/storage/</a
               >
             </li>
-            <li id="footnote-28">
+            <li id="footnote-31">
               <a href="https://docs.docker.com/storage/volumes/" target="_blank"
                 >https://docs.docker.com/storage/volumes/</a
               >
             </li>
-            <li id="footnote-29">
+            <li id="footnote-32">
               <a
                 href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html"
                 target="_blank"
                 >https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html</a
               >
             </li>
-            <li id="footnote-30">
+            <li id="footnote-33">
               <a
                 href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/docker-volumes.html#docker-volume-considerations"
                 target="_blank"
@@ -2368,7 +2399,10 @@
 
       <ul>
         <li class="individual">
-          <img src="images/avatars/catherine-profile.jpg" alt="Catherine Emond" />
+          <img
+            src="images/avatars/catherine-profile_460x460.jpg"
+            alt="Catherine Emond"
+          />
 
           <h3>Catherine Emond</h3>
 
@@ -2406,7 +2440,7 @@
 
           <h3>Mark Hyams</h3>
 
-          <p>Albuquerque, New Mexico, USA</p>
+          <p>Portland, Oregon &amp; Albuquerque, New Mexico</p>
 
           <ul class="social-icons">
             <li>
@@ -2416,7 +2450,7 @@
             </li>
 
             <li>
-              <a href="https://github.com/markhyams" target="_blank">
+              <a href="https://markhyams.com" target="_blank">
                 <img src="images/icons/website_icon.png" alt="website" />
               </a>
             </li>
