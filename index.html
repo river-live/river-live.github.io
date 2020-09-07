@@ -1442,8 +1442,7 @@
           API call. In fact, you need to make an API call for each connection
           you want to send a message to. Publishing a single update to 1m
           clients requires fetching all 1m connection IDs out of the database
-          and making 1m API calls, which is a deal breaker. S. Tabor,
-          Introducing Pubby our custom WebSockets solution [<a
+          and making 1m API calls, which is a deal breaker. [<a
             href="#footnote-26"
             >26</a
           >]
@@ -1640,15 +1639,13 @@
         <h4>7.2.3) With AWS Cloud Development Kit</h4>
 
         <p>
-          While researching better options, we came across AWS Cloud Development Kit (CDK) [<a
-          href="#footnote-27"
-          >27</a
-        >]. It is an abstraction on top of AWS CloudFormation templates
-          that makes them much easier to work with. AWS CDK is a very
-          interesting concept as it allows developers to write code in a
-          familiar language, e.g. JavaScript or Python, and model their
-          infrastructure using Object-Oriented code. Under the hood, it will
-          generate CloudFormation templates, preconfigured with sensible
+          While researching better options, we came across AWS Cloud Development
+          Kit (CDK) [<a href="#footnote-27">27</a>]. It is an abstraction on top
+          of AWS CloudFormation templates that makes them much easier to work
+          with. AWS CDK is a very interesting concept as it allows developers to
+          write code in a familiar language, e.g. JavaScript or Python, and
+          model their infrastructure using Object-Oriented code. Under the hood,
+          it will generate CloudFormation templates, preconfigured with sensible
           defaults. It makes infrastructure components easy to customize and
           easy to share. And it makes the whole infrastructure easy to deploy
           and easy to tear down.
@@ -1827,12 +1824,11 @@
         <h4>8.3.1) JSON Web Tokens</h4>
 
         <p>
-          JSON Web Token (JWT) is an internet standard described in RFC 7519[<a
-            href="#footnote-45"
-            >45</a
-          >] (https://tools.ietf.org/html/rfc7519). It is described here as a
-          “compact, URL-safe means of representing claims to be transferred
-          between two parties.”
+          JSON Web Token (JWT) is an internet standard described in RFC 7519 [<a
+            href="#footnote-28"
+            >28</a
+          >]. It is described here as a “compact, URL-safe means of representing
+          claims to be transferred between two parties.”
         </p>
 
         <div class="img-wrapper">
@@ -2028,22 +2024,30 @@
         </p>
 
         <p>
-          To remedy this, we increased the "nofile" <code>ulimits</code> of the
-          container, allowing more open files, since each new connection results
-          in a new file being opened. ECS gives a soft limit default of 1024 and
-          a hard limit default of 4096, so it makes sense that we were seeing
-          connection errors as we closed in on 7,000 connections with two tasks
-          (containers) running.
+          To remedy this, we increased the "nofile"
+          <code>ulimit</code> parameters of the container, allowing more open
+          file descriptors, since each new connection results in a new one [<a
+            href="#footnote-29"
+            >29</a
+          >]. ECS gives a soft limit default of 1024 and a hard limit default of
+          4096, so it makes sense that we were seeing connection errors as we
+          closed in on 7,000 connections with two tasks (containers) running.
         </p>
 
         <p>
-          ulimits were increased to the following:
-          <code
-            >"ulimits": [ { "name": "nofile", "softLimit": 50000, "hardLimit":
-            65536 } ]</code
-          >
+          <code>ulimits</code> were increased to the following:
+          <code class="nohighlight">
+            <pre>
+          "ulimits": [ 
+            {
+              "name": "nofile",
+              "softLimit": 50000,
+              "hardLimit": 65536
+            } 
+          ]</pre
+            >
+          </code>
         </p>
-
         <p>Once this was updated, the test ran without any errors.</p>
 
         <h4>8.4.4) Results</h4>
@@ -2331,46 +2335,20 @@
               >
             </li>
             <li id="footnote-27">
-              <a
-                href="https://aws.amazon.com/cdk/"
-                target="_blank"
+              <a href="https://aws.amazon.com/cdk/" target="_blank"
                 >https://aws.amazon.com/cdk/</a
               >
             </li>
             <li id="footnote-28">
-              <a href="https://redis.io/topics/benchmarks" target="_blank"
-                >https://redis.io/topics/benchmarks</a
+              <a href="https://tools.ietf.org/html/rfc7519" target="_blank"
+                >https://tools.ietf.org/html/rfc7519</a
               >
             </li>
             <li id="footnote-29">
               <a
-                href="https://docs.timescale.com/latest/using-timescaledb/ingesting-data"
+                href="https://centrifugal.github.io/centrifugo/blog/scaling_websocket/"
                 target="_blank"
-                >https://docs.timescale.com/latest/using-timescaledb/ingesting-data</a
-              >
-            </li>
-            <li id="footnote-30">
-              <a href="https://docs.docker.com/storage/" target="_blank"
-                >https://docs.docker.com/storage/</a
-              >
-            </li>
-            <li id="footnote-31">
-              <a href="https://docs.docker.com/storage/volumes/" target="_blank"
-                >https://docs.docker.com/storage/volumes/</a
-              >
-            </li>
-            <li id="footnote-32">
-              <a
-                href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html"
-                target="_blank"
-                >https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html</a
-              >
-            </li>
-            <li id="footnote-33">
-              <a
-                href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/docker-volumes.html#docker-volume-considerations"
-                target="_blank"
-                >https://docs.aws.amazon.com/AmazonECS/latest/developerguide/docker-volumes.html#docker-volume-considerations</a
+                >https://centrifugal.github.io/centrifugo/blog/scaling_websocket/</a
               >
             </li>
           </ol>
