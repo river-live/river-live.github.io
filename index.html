@@ -221,9 +221,9 @@
         <p>
           Real-time is a very wide space. At the outset, we want to narrow the
           focus and clarify what River is about. Real-time is about a fast
-          exchange of messages. A change happens somewhere in our system and
+          exchange of messages. A change happens somewhere in our system, and
           other parts of the system should be notified as fast as possible. What
-          “as fast as possible” means, though, varies quite a lot depending on
+          "as fast as possible" means, though, varies quite a lot depending on
           the context. Are we talking about microseconds latency? Is a missed
           deadline considered a system failure? For us, the answer to these
           questions is: no. We are in the context of web applications: this is
@@ -234,7 +234,7 @@
           Even within the realm of web apps, some systems are much more
           sensitive to delays than others: gaming or financial stock trading are
           good examples. In this case, a higher latency can have serious
-          consequences. These are sometimes called “firm” real-time. "Soft"
+          consequences. These are sometimes called "firm" real-time. "Soft"
           real-time, on the other hand, is much more flexible. In that case, a
           higher latency will result in a degraded user experience, not a system
           failure. Collaborative apps are a good example. One can think of a
@@ -265,9 +265,9 @@
         </div>
 
         <p>
-          If we think of the HTTP request-response model, “without user
-          intervention” would mean “without the client sending a request” and
-          usually this is not an option. What we want is an open channel of
+          If we think of the HTTP request-response model, "without user
+          intervention" would mean "without the client sending a request".
+          This is usually not an option. We want an open channel of
           communication through which messages can be sent between the server
           and the client, a bit more like an on-going conversation than a formal
           request. This bi-directional, message-based communication is such an
@@ -310,14 +310,14 @@
           </li>
           <li>
             Depending on the HTTP version used, the TCP connection may need to
-            be repeatedly established. This is normally avoided by using the
+            be repeatedly established. This is usually avoided by using the
             <code>keepalive</code> connection header to establish a persistent
             connection [<a href="#footnote-4">4</a>].
           </li>
         </ul>
 
         <p>
-          Long-polling is an attempt to improve the situation by having the
+          Long-polling attempts to improve the situation by having the
           server "wait" after receiving the HTTP request, allowing it to respond
           only when there are new events to be sent. While it is an improvement,
           the general impression - as stated in the RFC6202 [<a
@@ -338,7 +338,7 @@
           client "pull". As the name implies, after the connection is
           established, it is a one-way flow of data: the client cannot send
           messages to the server over that channel. With that limitation in
-          mind, SSE work very well for delivering fast updates, such as push
+          mind, SSEs work very well to deliver fast updates, such as push
           notifications. When considering SSE for River, the two main drawbacks
           were the unidirectional data flow and the limitation on the maximum
           number of open connections [<a href="#footnote-6">6</a>].
@@ -359,8 +359,8 @@
         </p>
 
         <p>
-          Through this open connection, WebSockets allow for efficient two-way
-          data communication by minimizing metadata and avoiding the overhead of
+          WebSockets allow for efficient two-way
+          data communication through this open connection by minimizing metadata and avoiding the overhead of
           frequently opening and closing connections [<a href="#footnote-9">9</a
           >]. Even more interesting, WebSockets give developers a lot of
           flexibility regarding the format of the messages sent. This can be
@@ -376,11 +376,11 @@
 
         <ul>
           <li>
-            <b>compatibility with existing infrastructure</b>: WebSocket is a
+            <b>Compatibility with existing infrastructure</b>: WebSocket is a
             different protocol, distinct from HTTP.
           </li>
           <li>
-            <b>scale and security</b>: many of the existing components of the
+            <b>Scale and security</b>: many of the existing components of the
             infrastructure (e.g. servers and load balancers) are built,
             configured, and maintained with HTTP in mind [<a href="#footnote-11"
               >11</a
@@ -430,19 +430,19 @@
         <h3>2.3) Is real-time hard?</h3>
 
         <p>
-          There is one final question we want to address in this section: how
+          We want to address one final question in this section: how
           hard is it to build a real-time application? The answer, obviously,
           depends on the requirements of the application. Does it require data
           persistence? Does it need to scale? How secure should it be?
         </p>
 
         <p>
-          Building a simple chat app is very easy to do: there are many
-          open-source libraries that make working with WebSockets easier, such
+          Building a simple chat app is very easy to do: many
+          open-source libraries make working with WebSockets easier, such
           as socket.io. If an application developer wants to add real-time
           functionality to an existing codebase of a certain size, though, it
           could be another story. He might need to make a lot of modifications
-          to the code and it can be worth considering putting that logic in a
+          to the code, and it can be worth considering putting that logic in a
           separate place. The same goes for building a resilient and scalable
           application: this is a new set of problems that could be difficult to
           handle if all the logic sits in one place. In the next section, we
