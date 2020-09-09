@@ -215,7 +215,7 @@
           "as fast as possible" means, though, varies quite a lot depending on
           the context. Are we talking about microseconds latency? Is a missed
           deadline considered a system failure? For us, the answer to these
-          questions is: no. We are in the context of web applications: this is
+          questions is: no. We are in the context of <em>web applications</em>: this is
           not about an airplane control system.
         </p>
 
@@ -391,10 +391,9 @@
 
         <p>
           Building a simple chat app is very easy to do: many
-          open-source libraries make working with WebSockets easier, such
-          as socket.io. If an application developer wants to add real-time
+          open-source libraries make working with WebSockets easier. If an application developer wants to add real-time
           functionality to an existing codebase of a certain size, though, it
-          could be another story. He might need to make a lot of modifications
+          could be another story. He might need to make many modifications
           to the code, and it can be worth considering putting that logic in a
           separate place. The same goes for building a resilient and scalable
           application: this is a new set of problems that could be difficult to
@@ -409,7 +408,7 @@
         <p>
           As we mentioned in the beginning, River is a “drop-in” real-time
           service. This means that River is a separate component meant to be
-          added to an existing application. Any time an extra piece is added to
+          added to an existing application. Any time we add an extra piece to
           a system, it brings in some additional complexity. It is
           a tradeoff that should be carefully considered and the need for a
           separate real-time service has to be justified. In this section, we
@@ -423,8 +422,8 @@
           cycle. What we haven’t mentioned yet is that our server - a process -
           is now responsible for maintaining the open WebSocket connections. A
           stateless request-response cycle like HTTP and persistent connections
-          like WebSockets have different technical requirements. These in turn
-          can influence the configuration of the server and cause issues that
+          like WebSockets have different technical requirements. These, in turn,
+          can influence the server's configuration and cause issues that
           will be amplified as the load on the server increases. This problem is
           often mentioned in the technical literature:
         </p>
@@ -441,8 +440,8 @@
           Having a separate server dedicated to maintaining WebSocket
           connections allows us to offload the management of persistent
           connections from our main application server. Again, this is common
-          wisdom, as expressed here by Armin Ronacher, the creator of the Flask
-          framework, in an article on lessons learned from using WebSockets:
+          wisdom, as expressed here by Armin Ronacher, the Flask
+          framework's creator, in an article on lessons learned from using WebSockets:
         </p>
 
         <blockquote>
@@ -509,7 +508,7 @@
         </div>
 
         <p>
-          The backend services can now send normal HTTP requests to the
+          The backend services can now send standard HTTP requests to the
           real-time service. In a sense, they are now decoupled from the
           clients, as the real-time service is responsible for sending the
           messages to the clients.
@@ -541,7 +540,7 @@
           services, or between the backend and the frontend. In all cases, it is
           a many-to-many relationship: multiple publishers can send events,
           while subscribers can subscribe to specific channels (sometimes called
-          topics) in order to receive events from those channels. A middle layer
+          topics) to receive events from those channels. A middle layer
           allows the decoupling of publishers and subscribers: they do not need
           to be aware of each other. This layer simply needs to provide an
           interface for publishing, subscribing, and unsubscribing.
@@ -554,7 +553,7 @@
           be a very powerful model, but we had a more modest goal in mind: a
           real-time service responsible for managing WebSocket connections.
           Thus, it is important to keep in mind that we are talking about a
-          browser-facing pub/sub system. The backend services publish events to
+          <em>browser-facing</em> pub/sub system. The backend services publish events to
           the real-time service, which sends them to the client-subscribers - in
           this case, browsers. Implemented as a custom protocol on top of
           WebSocket connections, publish/subscribe is widely used [<a
@@ -1630,7 +1629,7 @@
         <h3>8.1) Deployment</h3>
 
         <p>
-          Deploying River is one command: after cloning the repository, the
+          Deploying River is <em>one</em> command: after cloning the repository, the
           developer only needs to type <code>cdk deploy "*"</code>.
         </p>
 
@@ -1662,7 +1661,7 @@
 
         <p>
           As we mentioned in the beginning, River is meant to be used alongside
-          an existing application: besides deploying it, the developer will also
+          an existing application. Besides deploying it, the developer will also
           need to interact with it. This is what the outputs are for. They
           provide the load balancer endpoint through which clients will
           establish the connection, the API Gateway endpoint needed to publish
