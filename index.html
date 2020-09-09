@@ -223,14 +223,17 @@
           Even within the realm of web apps, some systems are much more
           sensitive to delays than others: gaming or financial stock trading are
           good examples. In this case, a higher latency can have serious
-          consequences. These are sometimes called "firm" real-time. "Soft"
-          real-time, on the other hand, is much more flexible. In that case, a
+          consequences. These are sometimes called "firm" real-time.
+        </p>
+
+        <p>
+          "Soft" real-time, on the other hand, is much more flexible. In that case, a
           higher latency will result in a degraded user experience, not a system
           failure. Collaborative apps are a good example. One can think of a
           collaborative text editor, such as Google docs, a discussion forum
           like Slack, or a shared calendar. The idea is that the real-time
-          application should update to the correct state without user
-          intervention [<a href="#footnote-1">1</a>]. These are the type of
+          application should update to the correct state <em>without user
+            intervention</em> [<a href="#footnote-1">1</a>]. These are the type of
           applications we had in mind when building River.
         </p>
 
@@ -377,28 +380,6 @@
           </li>
         </ul>
 
-        <h4>2.2.4) Metadata overhead</h4>
-
-        <p>
-          An interesting data point when looking at improving the performance of
-          web applications is metadata overhead. These numbers are taken from
-          the book <em>High-Performance Browser Networking</em> [<a
-            href="#footnote-12"
-            >12</a
-          >]:
-        </p>
-
-        <ul>
-          <li><b>WebSocket protocol</b>: 2-14 bytes of overhead</li>
-          <li><b>Server-Sent Events</b>: 5 bytes of overhead</li>
-          <li><b>HTTP 1.x</b>: 500-800 bytes of HTTP metadata, plus cookies</li>
-        </ul>
-
-        <p>
-          This is a significant difference, especially in the context of a fast
-          exchange of messages.
-        </p>
-
         <h3>2.3) Is real-time hard?</h3>
 
         <p>
@@ -453,7 +434,7 @@
           the servers, proxies, and other intermediaries are often configured to
           aggressively timeout idle HTTP connections, which, of course, is
           exactly what we don’t want to see for long-lived WebSocket sessions.
-          [<a href="#footnote-13">13</a>]
+          [<a href="#footnote-12">12</a>]
         </blockquote>
 
         <p>
@@ -468,7 +449,7 @@
           Keep your WebSockets miles away from the rest of your application
           code. Keep them in a separate server if you can. They have completely
           different performance characteristics than your regular HTTP requests.
-          [<a href="#footnote-14">14</a>]
+          [<a href="#footnote-13">13</a>]
         </blockquote>
 
         <p>
@@ -543,7 +524,7 @@
         <blockquote>
           Real-time applications consist of clients, a real-time communication
           layer, and backend servers working together to achieve business
-          objectives. [<a href="#footnote-15">15</a>]
+          objectives. [<a href="#footnote-14">14</a>]
         </blockquote>
 
         <p>
@@ -577,8 +558,8 @@
           the real-time service, which sends them to the client-subscribers - in
           this case, browsers. Implemented as a custom protocol on top of
           WebSocket connections, publish/subscribe is widely used [<a
-            href="#footnote-16"
-            >16</a
+            href="#footnote-15"
+            >15</a
           >] and remains a powerful pattern with a few obvious advantages.
         </p>
 
@@ -884,12 +865,12 @@
         <p>
           Broadly speaking, the existing solutions can be divided into two
           categories. On one side, there are many open-source libraries to serve
-          a very wide variety of needs. Centrifugo [<a href="#footnote-17">17</a>],
+          a very wide variety of needs. Centrifugo [<a href="#footnote-16">16</a>],
           for example, is a scalable real-time messaging server written in Go.
           It runs as a separate service and maintains persistent WebSocket
           connections with clients. It follows a very similar pattern to what we
           previously described and presents itself as a user-facing pub/sub
-          server [<a href="#footnote-18">18</a>]. Its use case is very similar
+          server [<a href="#footnote-17">17</a>]. Its use case is very similar
           to ours. It has been tested at scale and is under active development.
           On the downside, while it has been used at scale, it is not
           out-of-the-box ready to scale. The deployment scenario is left to the
@@ -903,15 +884,15 @@
         <p>
           On the other side of this problem space, there are many profitable
           companies that offer hosted paid services.
-          Pusher [<a href="#footnote-19">19</a>] is one of the major players
+          Pusher [<a href="#footnote-18">18</a>] is one of the major players
           in this space and it offers many advantages for application
           developers. It is very easy to use. It provides a simple web interface
           for creating real-time APIs, libraries for multiple languages, and
           strong guarantees. On the downside, it is not open-source and,
           depending on usage, it can be expensive. The free plan only supports
           up to 100 concurrent connections. To support 10,000 concurrent
-          connections, Pusher charges $500 per month [<a href="#footnote-20"
-            >20</a
+          connections, Pusher charges $500 per month [<a href="#footnote-19"
+            >19</a
           >].
         </p>
 
@@ -937,8 +918,8 @@
 
         <p>
           There is another non-open-source solution we looked at and want to
-          mention. DAZN [<a href="#footnote-21"
-          >21</a
+          mention. DAZN [<a href="#footnote-20"
+          >20</a
         >] is a sports
           streaming company. We were interested in a specific problem they
           solved with their own in-house solution. The problem wasn’t the
@@ -947,8 +928,8 @@
           looked at Amazon Web Services for a good solution and didn’t find
           something that matched their needs out-of-the-box. So they came up
           with their own solution and wrote a few good articles about it [<a
-            href="#footnote-22"
-            >22</a
+            href="#footnote-21"
+            >21</a
           >].
         </p>
 
@@ -1013,7 +994,7 @@
           market. It has a bewildering array of services, everything from a
           simple storage bucket to managing Internet of Things and even
           Satellites. AWS is robust, being the backend for huge companies like
-          Netflix, Pinterest and Slack. [<a href="#footnote-23">23</a>]
+          Netflix, Pinterest and Slack. [<a href="#footnote-22">22</a>]
         </p>
 
         <p>
@@ -1264,7 +1245,7 @@
           We also put our internal infrastructure inside a Virtual Private
           Cloud. This allows us to provision a logically isolated section of the
           AWS Cloud, and creates a virtual network over which we have complete
-          control. [<a href="#footnote-24">24</a>]
+          control. [<a href="#footnote-23">23</a>]
         </p>
 
         <h4>6.2.8) AWS Fargate</h4>
@@ -1301,8 +1282,8 @@
           ECS has two launch-type choices, the EC2 launch type, and the Fargate
           launch-type. We chose to use the Fargate launch-type, which Amazon
           describes as “serverless compute for containers.” [<a
-            href="#footnote-25"
-            >25</a
+            href="#footnote-24"
+            >24</a
           >]
         </p>
 
@@ -1364,7 +1345,7 @@
           no longer necessary. API Gateway handles the connections between the
           client and service. It lets you build your business logic using
           HTTP-based backends such as AWS Lambda, Amazon Kinesis, or any other
-          HTTP endpoint. [<a href="#footnote-26">26</a>]
+          HTTP endpoint. [<a href="#footnote-25">25</a>]
         </blockquote>
 
         <p>
@@ -1406,8 +1387,8 @@
           you want to send a message to. Publishing a single update to 1m
           clients requires fetching all 1m connection IDs out of the database
           and making 1m API calls, which is a deal breaker. [<a
-            href="#footnote-27"
-            >27</a
+            href="#footnote-26"
+            >26</a
           >]
         </blockquote>
 
@@ -1462,8 +1443,8 @@
             />
             <figcaption>
               Diagram from: AWS in Action [<a
-              href="#footnote-28"
-              >28</a
+              href="#footnote-27"
+              >27</a
             >]
             </figcaption>
           </figure>
@@ -1518,8 +1499,8 @@
             />
             <figcaption>
               From: AWS documentation [<a
-              href="#footnote-29"
-              >29</a
+              href="#footnote-28"
+              >28</a
             >]
             </figcaption>
           </figure>
@@ -1569,8 +1550,8 @@
             />
             <figcaption>
               From: AWS documentation [<a
-              href="#footnote-30"
-              >30</a
+              href="#footnote-29"
+              >29</a
             >]
             </figcaption>
           </figure>
@@ -1580,7 +1561,7 @@
 
         <p>
           While researching better options, we came across AWS Cloud Development
-          Kit (CDK) [<a href="#footnote-31">31</a>]. It is an abstraction on top
+          Kit (CDK) [<a href="#footnote-30">30</a>]. It is an abstraction on top
           of AWS CloudFormation templates that makes them much easier to work
           with. AWS CDK is a very interesting concept as it allows developers to
           write code in a familiar language, e.g. JavaScript or Python, and
@@ -1765,8 +1746,8 @@
 
         <p>
           JSON Web Token (JWT) is an internet standard described in RFC 7519 [<a
-            href="#footnote-32"
-            >32</a
+            href="#footnote-31"
+            >31</a
           >]. It is described here as a “compact, URL-safe means of representing
           claims to be transferred between two parties.”
         </p>
@@ -1967,8 +1948,8 @@
           To remedy this, we increased the "nofile"
           <code>ulimit</code> parameters of the container, allowing more open
           file descriptors, since each new connection results in a new one [<a
-            href="#footnote-33"
-            >33</a
+            href="#footnote-32"
+            >32</a
           >]. ECS gives a soft limit default of 1024 and a hard limit default of
           4096, so it makes sense that we were seeing connection errors as we
           closed in on 7,000 connections with two tasks (containers) running.
@@ -2169,26 +2150,19 @@
             </li>
             <li id="footnote-13">
               <a
-                href="https://hpbn.co/websocket/#performance-checklist"
-                target="_blank"
-                >https://hpbn.co/websocket/#performance-checklist</a
-              >
-            </li>
-            <li id="footnote-14">
-              <a
                 href="https://lucumr.pocoo.org/2012/9/24/websockets-101/"
                 target="_blank"
                 >https://lucumr.pocoo.org/2012/9/24/websockets-101/</a
               >
             </li>
-            <li id="footnote-15">
+            <li id="footnote-14">
               <a
                 href="https://pragprog.com/titles/sbsockets/real-time-phoenix/"
                 target="_blank"
                 >https://pragprog.com/titles/sbsockets/real-time-phoenix/</a
               >
             </li>
-            <li id="footnote-16">
+            <li id="footnote-15">
               <a
                 href="https://pusher.com/docs/channels/library_auth_reference/pusher-websockets-protocol#subscription-events"
                 target="_blank"
@@ -2205,36 +2179,36 @@
                 >https://www.ably.io/documentation/core-features/channels</a
               >
             </li>
-            <li id="footnote-17">
+            <li id="footnote-16">
               <a
                 href="https://centrifugal.github.io/centrifugo/"
                 target="_blank"
                 >https://centrifugal.github.io/centrifugo/</a
               >
             </li>
-            <li id="footnote-18">
+            <li id="footnote-17">
               <a
                 href="https://centrifugal.github.io/centrifugo/getting_started/"
                 target="_blank"
                 >https://centrifugal.github.io/centrifugo/getting_started/</a
               >
             </li>
-            <li id="footnote-19">
+            <li id="footnote-18">
               <a href="https://pusher.com/" target="_blank"
                 >https://pusher.com/</a
               >
             </li>
-            <li id="footnote-20">
+            <li id="footnote-19">
               <a href="https://pusher.com/channels/pricing" target="_blank"
                 >https://pusher.com/channels/pricing</a
               >
             </li>
-            <li id="footnote-21">
+            <li id="footnote-20">
               <a href="https://www.dazn.com" target="_blank"
                 >https://www.dazn.com</a
               >
             </li>
-            <li id="footnote-22">
+            <li id="footnote-21">
               <a
                 href="https://medium.com/dazn-tech/aws-serverless-websockets-at-scale-8a79cd5a9f3b"
                 target="_blank"
@@ -2246,63 +2220,63 @@
                 >https://medium.com/dazn-tech/introducing-pubby-our-custom-websockets-solution-c5764e3a7dcb</a
               >
             </li>
-            <li id="footnote-23">
+            <li id="footnote-22">
               <a
                 href="https://en.wikipedia.org/wiki/Amazon_Web_Services"
                 target="_blank"
                 >https://en.wikipedia.org/wiki/Amazon_Web_Services</a
               >
             </li>
-            <li id="footnote-24">
+            <li id="footnote-23">
               <a href="https://aws.amazon.com/vpc/" target="_blank"
                 >https://aws.amazon.com/vpc/</a
               >
             </li>
-            <li id="footnote-25">
+            <li id="footnote-24">
               <a href="https://aws.amazon.com/ecs/" target="_blank"
                 >https://aws.amazon.com/ecs/</a
               >
             </li>
-            <li id="footnote-26">
+            <li id="footnote-25">
               <a
                 href="https://aws.amazon.com/blogs/compute/announcing-websocket-apis-in-amazon-api-gateway/"
                 target="_blank"
                 >https://aws.amazon.com/blogs/compute/announcing-websocket-apis-in-amazon-api-gateway/</a
               >
             </li>
-            <li id="footnote-27">
+            <li id="footnote-26">
               <a
                 href="https://medium.com/dazn-tech/introducing-pubby-our-custom-WebSockets-solution-c5764e3a7dcb"
                 target="_blank"
                 >https://medium.com/dazn-tech/introducing-pubby-our-custom-WebSockets-solution-c5764e3a7dcb</a
               >
             </li>
-            <li id="footnote-28">
+            <li id="footnote-27">
               <a href="https://www.manning.com/books/amazon-web-services-in-action" target="_blank"
                 >https://www.manning.com/books/amazon-web-services-in-action</a
               >
             </li>
-            <li id="footnote-29">
+            <li id="footnote-28">
               <a href="https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-awscli.html" target="_blank"
                 >https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-awscli.html</a
               >
             </li>
-            <li id="footnote-30">
+            <li id="footnote-29">
               <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html" target="_blank"
                 >https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html</a
               >
             </li>
-            <li id="footnote-31">
+            <li id="footnote-30">
               <a href="https://aws.amazon.com/cdk/" target="_blank"
                 >https://aws.amazon.com/cdk/</a
               >
             </li>
-            <li id="footnote-32">
+            <li id="footnote-31">
               <a href="https://tools.ietf.org/html/rfc7519" target="_blank"
                 >https://tools.ietf.org/html/rfc7519</a
               >
             </li>
-            <li id="footnote-33">
+            <li id="footnote-32">
               <a
                 href="https://centrifugal.github.io/centrifugo/blog/scaling_websocket/"
                 target="_blank"
